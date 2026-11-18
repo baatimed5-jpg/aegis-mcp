@@ -37,8 +37,12 @@ def test_namespace_rejects_bad_parts(server: str, tool: str) -> None:
 def test_repo_config_loads() -> None:
     config = load_config(REPO_CONFIG)
     assert config.servers["wealth"].transport == "streamable_http"
-    assert config.pipeline.request == ["audit"]
+    assert config.pipeline.request == ["auth", "pii_mask", "policy", "injection_scan", "audit"]
+    assert config.pipeline.response == ["pii_mask", "injection_scan"]
     assert "wealth" in config.enabled_servers
+    assert "malicious" not in config.enabled_servers  # test-only server stays off by default
+    assert config.policies_file is not None
+    assert Path(config.policies_file).is_file()
 
 
 def test_database_url_from_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

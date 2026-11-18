@@ -16,6 +16,8 @@ from gateway.mcp_facade import build_mcp_server, user_meta
 from gateway.middlewares.audit import AuditMiddleware, audit_row
 from gateway.pipeline.context import CallContext
 from gateway.pipeline.runner import Pipeline
+from gateway.services import Services
+from gateway.store import MemoryStore
 from servers.wealth.server import build_server
 
 CONFIG = GatewayConfig.model_validate(
@@ -33,29 +35,13 @@ CALLS: list[tuple[str, dict[str, Any]]] = [
 ]
 
 
-class MemoryAuditStore:
-    """Keeps the latest version of every audit row, plus the history of writes."""
-
-    def __init__(self) -> None:
-        self.rows: dict[Any, dict[str, Any]] = {}
-        self.writes: list[str] = []
-        self.closed = False
-
-    async def upsert(self, row: dict[str, Any]) -> None:
-        self.rows[row["id"]] = dict(row)
-        self.writes.append(row["status"])
-
-    async def close(self) -> None:
-        self.closed = True
-
-
 @pytest.fixture
-def store() -> MemoryAuditStore:
-    return MemoryAuditStore()
+def store() -> MemoryStore:
+    return MemoryStore()
 
 
 @asynccontextmanager
-async def running(store: MemoryAuditStore) -> AsyncIterator[Gateway]:
+async def running(store: MemoryStore) -> AsyncIterator[Gateway]:
     """Open the gateway inside the test's own task (anyio cancel scopes must exit where entered)."""
     pipeline = Pipeline(request=[AuditMiddleware(store)], response=[])
     async with Gateway(CONFIG, targets={"wealth": build_server()}, pipeline=pipeline) as gw:
@@ -66,7 +52,7 @@ def comparable(res: CallToolResult) -> dict[str, Any]:
     return {"content": res.model_dump()["content"], "structured": res.structured_content, "err": res.is_error}
 
 
-async def test_tools_are_namespaced(store: MemoryAuditStore) -> None:
+async def test_tools_are_namespaced(store: MemoryStore) -> None:
     async with running(store) as gateway, Client(build_server()) as direct:
         direct_tools = {t.name: t for t in (await direct.list_tools()).tools}
         async with Client(build_mcp_server(gateway, lambda _c: "assistant")) as agent:
@@ -80,7 +66,7 @@ async def test_tools_are_namespaced(store: MemoryAuditStore) -> None:
         assert t.annotations == original.annotations
 
 
-async def test_results_identical_to_direct(store: MemoryAuditStore) -> None:
+async def test_results_identical_to_direct(store: MemoryStore) -> None:
     async with (
         running(store) as gateway,
         Client(build_server()) as direct,
@@ -90,38 +76,39 @@ async def test_results_identical_to_direct(store: MemoryAuditStore) -> None:
             expected = await direct.call_tool(tool, args)
             got = await agent.call_tool(f"wealth__{tool}", args)
             assert comparable(got) == comparable(expected), tool
-    rows = list(store.rows.values())
+    rows = list(store.audit.values())
     assert len(rows) == len(CALLS)
     assert [(r["tool"], r["arguments"]) for r in rows] == CALLS
     assert {r["agent_id"] for r in rows} == {"assistant"}
     assert [r["status"] for r in rows] == ["allowed"] * 6 + ["error"]
     assert all(r["latency_total_ms"] is not None and r["latency_downstream_ms"] is not None for r in rows)
     # each call: one in_progress write before the downstream call, then the final write
-    assert store.writes[:2] == ["in_progress", "allowed"]
+    assert store.audit_writes[:2] == ["in_progress", "allowed"]
 
 
-async def test_unknown_tool_is_audited(store: MemoryAuditStore) -> None:
+async def test_unknown_tool_is_audited(store: MemoryStore) -> None:
     async with running(store) as gateway:
         for name in ("wealth__nope", "other__get_holdings", "no_namespace"):
             res = await gateway.call_tool("a", name, {})
             assert res.is_error
-    rows = list(store.rows.values())
+    rows = list(store.audit.values())
     assert [r["status"] for r in rows] == ["error"] * 3
     assert rows[1]["server"] == "other"
     assert rows[2]["server"] == ""
     assert all(r["reason"].startswith("unknown_tool") for r in rows)
 
 
-async def test_audit_store_closed_on_exit(store: MemoryAuditStore) -> None:
+async def test_audit_store_closed_on_exit(store: MemoryStore) -> None:
     pipeline = Pipeline(request=[AuditMiddleware(store)], response=[])
-    async with Gateway(CONFIG, targets={"wealth": build_server()}, pipeline=pipeline):
+    services = Services(CONFIG, store=store)
+    async with Gateway(CONFIG, targets={"wealth": build_server()}, pipeline=pipeline, services=services):
         pass
     assert store.closed
 
 
 async def test_audit_failure_fails_closed() -> None:
-    class BrokenStore(MemoryAuditStore):
-        async def upsert(self, row: dict[str, Any]) -> None:
+    class BrokenStore(MemoryStore):
+        async def upsert_audit(self, row: dict[str, Any], events: list[dict[str, Any]] | None = None) -> None:
             raise ConnectionError("db down")
 
     pipeline = Pipeline(request=[AuditMiddleware(BrokenStore())], response=[])

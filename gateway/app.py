@@ -11,13 +11,15 @@ from fastapi import FastAPI
 from mcp.server.stdio import stdio_server
 from mcp.types import CallToolResult, Tool
 
+from gateway.api.approvals import approvals_router
 from gateway.config import GatewayConfig
 from gateway.downstream import DownstreamManager, ServerTarget
-from gateway.mcp_facade import build_mcp_server
+from gateway.mcp_facade import bearer_identity, build_mcp_server
 from gateway.middlewares.registry import build_pipeline
 from gateway.namespacing import split
 from gateway.pipeline.context import CallContext, ListContext
 from gateway.pipeline.runner import Pipeline
+from gateway.services import Services
 
 log = logging.getLogger(__name__)
 
@@ -34,17 +36,20 @@ class Gateway:
         *,
         targets: dict[str, ServerTarget] | None = None,
         pipeline: Pipeline | None = None,
+        services: Services | None = None,
     ) -> None:
         self.config = config
+        self.services = services if services is not None else Services(config)
         self.downstream = DownstreamManager(targets if targets is not None else dict(config.enabled_servers))
-        self.pipeline = pipeline if pipeline is not None else build_pipeline(config)
+        self.pipeline = pipeline if pipeline is not None else build_pipeline(config, self.services)
 
     async def __aenter__(self) -> Gateway:
-        await self.pipeline.startup()
         try:
+            await self.pipeline.startup()
             await self.downstream.__aenter__()
         except BaseException:
             await self.pipeline.shutdown()
+            await self.services.close()
             raise
         log.info(
             "gateway ready: %d tools from %s", len(self.downstream.routes), list(self.downstream.clients)
@@ -56,14 +61,35 @@ class Gateway:
             await self.downstream.__aexit__(*exc)
         finally:
             await self.pipeline.shutdown()
+            await self.services.close()
 
-    async def list_tools(self, agent_id: str, meta: dict[str, Any] | None = None) -> list[Tool]:
-        """Aggregated, namespaced tool list after the ``on_list_tools`` hooks."""
-        ctx = ListContext(agent_id=agent_id, meta=meta or {})
+    async def list_tools(
+        self,
+        agent_id: str,
+        meta: dict[str, Any] | None = None,
+        *,
+        credential: str | None = None,
+        authenticated: bool = True,
+    ) -> list[Tool]:
+        """Aggregated, namespaced tool list after the ``on_list_tools`` hooks.
+
+        ``authenticated=True`` means ``agent_id`` is already trusted (stdio, tests); HTTP callers pass
+        their API key as ``credential`` with ``authenticated=False``.
+        """
+        ctx = ListContext(
+            agent_id=agent_id, meta=meta or {}, credential=credential, authenticated=authenticated
+        )
         return await self.pipeline.list_tools(ctx, self.downstream.public_tools())
 
     async def call_tool(
-        self, agent_id: str, public_name: str, arguments: dict[str, Any], meta: dict[str, Any] | None = None
+        self,
+        agent_id: str,
+        public_name: str,
+        arguments: dict[str, Any],
+        meta: dict[str, Any] | None = None,
+        *,
+        credential: str | None = None,
+        authenticated: bool = True,
     ) -> CallToolResult:
         """Run one call through the pipeline. Unknown names are still audited, then rejected."""
         try:
@@ -72,8 +98,10 @@ class Gateway:
             server, tool = "", public_name
         ctx = CallContext(
             agent_id=agent_id, public_name=public_name, server=server, tool=tool, arguments=arguments,
-            meta=meta or {},
+            meta=meta or {}, credential=credential, authenticated=authenticated,
         )  # fmt: skip
+        route = self.downstream.routes.get(public_name)
+        ctx.tool_def = route.tool if route is not None else None
 
         async def downstream(c: CallContext) -> CallToolResult:
             route = self.downstream.route(c.public_name)
@@ -83,9 +111,8 @@ class Gateway:
 
 
 def create_http_app(gateway: Gateway, *, host: str = "127.0.0.1") -> FastAPI:
-    """FastAPI app: MCP Streamable HTTP at ``/mcp`` plus ``/healthz`` (REST API comes in later phases)."""
-    default_agent = gateway.config.default_agent
-    mcp_server = build_mcp_server(gateway, lambda _ctx: default_agent)
+    """FastAPI app: MCP Streamable HTTP at ``/mcp``, ``/healthz`` and the admin REST API under ``/api``."""
+    mcp_server = build_mcp_server(gateway, bearer_identity(gateway.config.default_agent))
     mcp_app = mcp_server.streamable_http_app(host=host)
 
     @asynccontextmanager
@@ -104,6 +131,7 @@ def create_http_app(gateway: Gateway, *, host: str = "127.0.0.1") -> FastAPI:
             "tools": len(gateway.downstream.routes),
         }
 
+    app.include_router(approvals_router(gateway))
     app.mount("/", mcp_app)
     return app
 

@@ -72,7 +72,7 @@ class Pipeline:
             for mw in self.response:
                 await mw.on_response(ctx)
             if ctx.status == "in_progress":
-                ctx.status = "allowed"
+                ctx.status = "approved" if ctx.approved else "allowed"
         except PipelineDenied as exc:
             ctx.status = exc.status
             ctx.reason = f"{exc.code}: {exc.reason}"

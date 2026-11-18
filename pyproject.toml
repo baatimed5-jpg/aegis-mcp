@@ -5,9 +5,11 @@ requires-python = ">=3.12,<3.13"
 dependencies = [
     "alembic==1.20.1",
     "asyncpg==0.32.0",
+    "en-core-web-sm",
     "faker==40.54.0",
     "fastapi==0.164.0",
     "mcp==2.3.0",
+    "presidio-analyzer==2.2.366",
     "pydantic==2.14.3",
     "pyyaml==6.0.3",
     "sqlalchemy[asyncio]==2.1.9",
@@ -56,6 +58,9 @@ markers = ["integration: needs real Postgres/Redis (docker compose)"]
 [tool.coverage.run]
 source = ["servers", "gateway"]
 branch = true
+
+[tool.uv.sources]
+en-core-web-sm = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl" }
 
 [[tool.mypy.overrides]]
 module = ["asyncpg", "asyncpg.*"]

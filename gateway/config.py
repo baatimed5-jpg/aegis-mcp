@@ -45,7 +45,7 @@ class ServerConfig(_Strict):
 
 
 class AgentConfig(_Strict):
-    """An agent allowed to use the gateway (its API key is read from ``token_env`` in Phase 3)."""
+    """An agent allowed to use the gateway; its API key is read from the env var ``token_env`` (D5)."""
 
     token_env: str | None = None
 
@@ -66,6 +66,9 @@ class GatewayConfig(_Strict):
     middlewares: dict[str, dict[str, Any]] = Field(default_factory=dict)
     default_agent: str = "anonymous"
     database_url: str | None = None
+    policies_file: str | None = None
+    approval_timeout_s: float = Field(default=120.0, gt=0)
+    admin_token_env: str | None = "ADMIN_TOKEN"
 
     @field_validator("servers")
     @classmethod
@@ -96,7 +99,10 @@ def load_env_file(path: Path) -> None:
 
 
 def load_config(path: Path | str = DEFAULT_CONFIG_PATH, *, env_file: Path | None = None) -> GatewayConfig:
-    """Read the YAML config, then take ``DATABASE_URL`` from the environment."""
+    """Read the YAML config, then take ``DATABASE_URL`` from the environment.
+
+    A relative ``policies_file`` is resolved against the YAML file's directory.
+    """
     if env_file is not None:
         load_env_file(env_file)
     data = yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}
@@ -105,4 +111,6 @@ def load_config(path: Path | str = DEFAULT_CONFIG_PATH, *, env_file: Path | None
     config = GatewayConfig.model_validate(data)
     if config.database_url is None:
         config.database_url = os.environ.get("DATABASE_URL")
+    if config.policies_file and not Path(config.policies_file).is_absolute():
+        config.policies_file = str((Path(path).parent / config.policies_file).resolve())
     return config

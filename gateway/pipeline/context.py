@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any, Literal
 
-from mcp.types import CallToolResult
+from mcp.types import CallToolResult, Tool
 
 CallStatus = Literal["in_progress", "allowed", "denied", "blocked", "error", "approved", "timeout"]
 
@@ -18,6 +18,10 @@ class CallContext:
     """One ``tools/call`` going through the gateway.
 
     Middlewares read and update it; the runner fills ``result``, ``status`` and latencies.
+    ``credential`` is the raw API key from the transport (HTTP Bearer) and ``authenticated`` is true
+    once the identity is established (by the auth middleware, or by the stdio launcher).
+    ``tool_def`` is the downstream tool definition (``None`` for unknown tools);
+    ``audit_arguments`` is a masked copy of ``arguments`` for the audit log (PII middleware).
     """
 
     agent_id: str
@@ -26,6 +30,11 @@ class CallContext:
     tool: str
     arguments: dict[str, Any]
     meta: dict[str, Any] = field(default_factory=dict)
+    credential: str | None = None
+    authenticated: bool = False
+    tool_def: Tool | None = None
+    audit_arguments: dict[str, Any] | None = None
+    approved: bool = False
     call_id: uuid.UUID = field(default_factory=uuid.uuid4)
     run_id: uuid.UUID | None = None
     ts: datetime = field(default_factory=lambda: datetime.now(UTC))
@@ -45,3 +54,5 @@ class ListContext:
 
     agent_id: str
     meta: dict[str, Any] = field(default_factory=dict)
+    credential: str | None = None
+    authenticated: bool = False

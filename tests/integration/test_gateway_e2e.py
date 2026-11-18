@@ -9,12 +9,8 @@ Needs ``docker compose up -d postgres`` and ``DATABASE_URL`` (env or .env). A se
 
 from __future__ import annotations
 
-import asyncio
 import os
-import socket
-import subprocess
 import sys
-import time
 import uuid
 from collections.abc import Iterator
 from datetime import UTC, datetime
@@ -23,18 +19,13 @@ from typing import Any
 
 import asyncpg
 import pytest
-from alembic import command
-from alembic.config import Config
 from mcp import Client, StdioServerParameters
 from mcp.types import CallToolResult
-from sqlalchemy.engine import make_url
 
-from gateway.config import load_env_file
-from gateway.middlewares.audit import PostgresAuditStore
+from gateway.store import PostgresStore
+from tests.integration.helpers import ROOT, connect, free_port, spawn, stop, wait_port
 
 pytestmark = pytest.mark.integration
-
-ROOT = Path(__file__).resolve().parents[2]
 
 CALLS: list[tuple[str, dict[str, Any]]] = [
     ("get_client", {"name": "a"}),  # ambiguous name -> downstream tool error, passed through
@@ -45,78 +36,6 @@ CALLS: list[tuple[str, dict[str, Any]]] = [
     ("get_portfolio_performance", {"portfolio_id": "PF-00005", "period": "YTD"}),
     ("transfer_funds", {"from_portfolio_id": "PF-00001", "to_portfolio_id": "PF-00002", "amount": 10.5}),
 ]
-
-
-def _free_port() -> int:
-    with socket.socket() as s:
-        s.bind(("127.0.0.1", 0))
-        port: int = s.getsockname()[1]
-        return port
-
-
-def _wait_port(port: int, proc: subprocess.Popen[bytes], what: str) -> None:
-    deadline = time.monotonic() + 30
-    while time.monotonic() < deadline:
-        if proc.poll() is not None:
-            pytest.fail(f"{what} exited early with code {proc.returncode}")
-        try:
-            socket.create_connection(("127.0.0.1", port), timeout=0.5).close()
-            return
-        except OSError:
-            time.sleep(0.2)
-    pytest.fail(f"{what} did not start within 30 s")
-
-
-def _spawn(args: list[str], env: dict[str, str] | None = None) -> subprocess.Popen[bytes]:
-    return subprocess.Popen(
-        [sys.executable, *args], cwd=ROOT, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-    )
-
-
-def _stop(proc: subprocess.Popen[bytes]) -> None:
-    proc.terminate()
-    proc.wait(timeout=10)
-
-
-@pytest.fixture(scope="module")
-def test_db_url() -> str:
-    """Create (if needed) and migrate a dedicated test database; return its SQLAlchemy URL."""
-    load_env_file(ROOT / ".env")
-    base = os.environ.get("DATABASE_URL")
-    if not base:
-        pytest.fail("DATABASE_URL is not set (copy .env.example to .env)")
-    url = make_url(base)
-    test_url = url.set(database=f"{url.database}_test")
-
-    async def ensure_db() -> None:
-        conn = await asyncpg.connect(
-            user=url.username, password=url.password, host=url.host, port=url.port, database=url.database
-        )
-        try:
-            exists = await conn.fetchval("SELECT 1 FROM pg_database WHERE datname = $1", test_url.database)
-            if not exists:
-                await conn.execute(f'CREATE DATABASE "{test_url.database}"')
-        finally:
-            await conn.close()
-
-    asyncio.run(ensure_db())
-    rendered = test_url.render_as_string(hide_password=False)
-    cfg = Config(str(ROOT / "alembic.ini"))
-    cfg.attributes["database_url"] = rendered
-    cfg.attributes["configure_logger"] = False
-    command.upgrade(cfg, "head")
-    return rendered
-
-
-@pytest.fixture(scope="module")
-def wealth_url() -> Iterator[str]:
-    port = _free_port()
-    proc = _spawn(["-m", "servers.wealth", "--port", str(port)])
-    try:
-        _wait_port(port, proc, "wealth server")
-        yield f"http://127.0.0.1:{port}/mcp"
-    finally:
-        _stop(proc)
 
 
 @pytest.fixture(scope="module")
@@ -137,30 +56,22 @@ def gateway_env(test_db_url: str) -> dict[str, str]:
 
 @pytest.fixture(scope="module")
 def gateway_url(gateway_config: Path, gateway_env: dict[str, str]) -> Iterator[str]:
-    port = _free_port()
-    proc = _spawn(["-m", "gateway", "--config", str(gateway_config), "--port", str(port)], gateway_env)
+    port = free_port()
+    proc = spawn(["-m", "gateway", "--config", str(gateway_config), "--port", str(port)], gateway_env)
     try:
-        _wait_port(port, proc, "gateway")
+        wait_port(port, proc, "gateway")
         yield f"http://127.0.0.1:{port}/mcp"
     finally:
-        _stop(proc)
+        stop(proc)
 
 
 def comparable(res: CallToolResult) -> dict[str, Any]:
     return {"content": res.model_dump()["content"], "structured": res.structured_content, "err": res.is_error}
 
 
-async def _connect(db_url: str) -> asyncpg.Connection:
-    """Plain asyncpg connection from a SQLAlchemy URL."""
-    url = make_url(db_url)
-    return await asyncpg.connect(
-        user=url.username, password=url.password, host=url.host, port=url.port, database=url.database
-    )
-
-
 async def audit_rows(db_url: str, marker: str) -> list[asyncpg.Record]:
     """Rows whose arguments carry the test's unique marker (``reference`` or ``name``)."""
-    conn = await _connect(db_url)
+    conn = await connect(db_url)
     try:
         return list(
             await conn.fetch(
@@ -219,7 +130,7 @@ async def test_stdio_agent_through_gateway(
 
 async def test_every_call_is_audited(gateway_url: str, test_db_url: str) -> None:
     """Count rows for one agent session: N calls -> N rows, none left in_progress."""
-    conn = await _connect(test_db_url)
+    conn = await connect(test_db_url)
     try:
         before = await conn.fetchval("SELECT count(*) FROM audit_call")
         async with Client(gateway_url) as agent:
@@ -239,7 +150,7 @@ async def test_every_call_is_audited(gateway_url: str, test_db_url: str) -> None
 
 
 async def test_postgres_store_upsert(test_db_url: str) -> None:
-    store = PostgresAuditStore.from_url(test_db_url)
+    store = PostgresStore.from_url(test_db_url)
     call_id = uuid.uuid4()
     row: dict[str, Any] = {
         "id": call_id, "run_id": None, "ts": datetime.now(UTC),
@@ -249,11 +160,11 @@ async def test_postgres_store_upsert(test_db_url: str) -> None:
         "latency_downstream_ms": None, "cache_hit": False,
     }  # fmt: skip
     try:
-        await store.upsert(row)
-        await store.upsert({**row, "status": "denied", "reason": "policy: x", "latency_total_ms": 1.5})
+        await store.upsert_audit(row)
+        await store.upsert_audit({**row, "status": "denied", "reason": "policy: x", "latency_total_ms": 1.5})
     finally:
         await store.close()
-    conn = await _connect(test_db_url)
+    conn = await connect(test_db_url)
     try:
         got = await conn.fetch(
             "SELECT status, reason, latency_total_ms FROM audit_call WHERE id = $1", call_id

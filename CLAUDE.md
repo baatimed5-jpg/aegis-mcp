@@ -31,7 +31,7 @@ gateway 8000 · wealth 8001 · malicious 8002 · dashboard 4200 · postgres 5432
 - Infra: `docker compose up -d postgres redis`
 - Test: `uv run pytest` (unit only: `uv run pytest tests/unit`)
 - Lint/types: `uv run ruff check . && uv run ruff format --check . && uv run mypy`
-- Wealth server: `uv run python -m servers.wealth` (:8001)
+- Wealth server: `uv run python -m servers.wealth` (:8001) · malicious test server: `uv run python -m servers.malicious` (:8002)
 - DB migrations: `uv run alembic upgrade head`
 - Gateway: `uv run python -m gateway` (HTTP :8000) · `uv run python -m gateway --stdio --agent <id>`
 

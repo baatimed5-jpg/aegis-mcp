@@ -331,9 +331,9 @@ approval_timeout_s: 120
 - [x] Integration test: direct call == gateway call; audit row per call
 
 **Phase 3: security**
-- [ ] Auth, policies (YAML rules), approval queue (REST + timeout), PII (Presidio)
-- [ ] Rule-based injection detector + scan middleware (descriptions/args/responses)
-- [ ] Malicious server + tests for each DONE criterion
+- [x] Auth, policies (YAML allow lists, D22), approval queue (REST + timeout), PII (Presidio, D23)
+- [x] Rule-based injection detector + scan middleware (descriptions/args/responses)
+- [x] Malicious server + tests for each DONE criterion
 
 **Phase 4: assistant and baseline**
 - [ ] Verify Agents SDK + LiteLLM integration (else PydanticAI, documented)

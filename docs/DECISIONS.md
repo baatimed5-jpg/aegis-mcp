@@ -116,3 +116,43 @@ Format: **Decision**, then *Alternatives*, then *Reason*. Numbering follows ARCH
 - **Decision**: `DownstreamManager` opens one `mcp.Client` per enabled server at startup (HTTP or stdio,
   plus in-process servers for tests) and discovers tools once (`refresh()`, pagination followed).
 - *Reason*: no per-call handshake latency. Tool-list refresh on `list_changed` is left for later.
+
+## D21: Approval and security-event rows reference the call; only events have a foreign key
+- **Decision**: `approval.audit_call_id` is an indexed UUID without a foreign key; `security_event.audit_call_id`
+  has one (`ON DELETE CASCADE`). Call events are collected in `ctx.extra["security_events"]` and written by
+  the audit middleware in the same transaction as the final audit row. Description events have no call.
+  Audit, approvals and events share one `GatewayStore` (one connection pool, `gateway/store.py`).
+- *Alternatives*: write the audit row before the policy step; deferrable constraints.
+- *Reason*: the policy step (and its approval) runs before the audit step, so the audit row may not exist
+  yet when the approval is created; events are written after the row, so their FK always holds.
+
+## D22: Policies = per-agent allow lists (chosen by the user, 2026-11-18)
+- **Decision**: `config/policies.yaml` maps each agent to `allow` and `require_approval` glob lists on public
+  tool names (`fnmatchcase`). `require_approval` wins over `allow`; everything else is denied (default deny,
+  unknown agents included). Agents only see tools they may call in `tools/list`.
+- *Alternatives*: ordered rules with argument conditions (e.g. "transfers above 10,000 need approval").
+- *Reason*: simpler to read and explain; argument conditions were not needed for the DONE criteria.
+
+## D23: Presidio with `en_core_web_sm`, pattern entities only, per JSON value with field-name context
+- **Decision**: the small spaCy model (12 MB, chosen by the user) as a pinned wheel URL. Default entities:
+  IBAN, email, phone, credit card, US SSN (no PERSON, so client names stay usable by the assistant). When
+  all entities are pattern-based, spaCy pipes are disabled and strings without a digit or `@` are skipped.
+  Each value is analysed with its field name as Presidio context; findings below `min_score` 0.5 are kept.
+- *Alternatives*: `en_core_web_lg` (~400 MB); analysing the whole serialized response.
+- *Reason*: measured ~1 s per large response with the full pipeline vs ~0.1-0.25 s; per-value analysis
+  with context avoids false hits on IDs (`ORD-214408183` scored 0.05 as SSN, `STL-…` 0.4 as phone) while a
+  phone under the key `phone` scores 0.75. Known gap: ~13% of Faker phone formats (`001-…x42940`) are missed.
+
+## D24: Rule detector = weighted regexes combined with noisy-OR, on normalized text
+- **Decision**: NFKC, zero-width/bidi characters removed, Unicode tag characters decoded (ASCII smuggling),
+  lower case; 13 weighted rules + a hidden-character signal; `score = 1 - prod(1 - w)`. Default threshold
+  0.5. Actions: descriptions `hide` (also blocks calls), arguments `block`, responses `sanitize` (per value).
+- *Alternatives*: a single keyword list; scoring the whole response.
+- *Reason*: explainable scores in [0, 1] that the Phase 6 detectors can be compared with; weak signals
+  ("urgent:", money movement) need company. **Caveat**: the rules were written knowing the malicious
+  server's payloads; the fair measurement is Phase 6 on held-out public datasets.
+
+## D25: Admin REST API protected by its own key
+- **Decision**: `/api/approvals` requires `Authorization: Bearer $ADMIN_TOKEN` (env var named by
+  `admin_token_env`); without it the API answers 503. Agent keys are not admin keys.
+- *Reason*: an unauthenticated approval endpoint would let anyone approve a transfer.

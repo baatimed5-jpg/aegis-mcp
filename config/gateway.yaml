@@ -1,15 +1,36 @@
-# AegisMCP gateway configuration. Secrets (DATABASE_URL, agent tokens) come from the environment / .env.
+# AegisMCP gateway configuration. Secrets (DATABASE_URL, agent and admin keys) come from the environment / .env.
 servers:
   wealth: {transport: streamable_http, url: http://127.0.0.1:8001/mcp}
   # Same server launched as a subprocess instead:
   # wealth: {transport: stdio, command: python, args: ["-m", "servers.wealth", "--stdio"]}
+  # Test-only server with poisoned tools (python -m servers.malicious, :8002). Never enable in a demo for real users.
+  malicious: {transport: streamable_http, url: http://127.0.0.1:8002/mcp, enabled: false}
 
+# API keys (D5): each agent sends "Authorization: Bearer <key>"; the key is read from token_env.
 agents:
   assistant: {token_env: AGENT_TOKEN_ASSISTANT}
+  redteam: {token_env: AGENT_TOKEN_REDTEAM}
 
-# Until API-key auth exists (Phase 3), HTTP callers are recorded under this agent id.
+# Agent id recorded for HTTP calls before authentication (denied by auth unless a valid key is sent).
 default_agent: anonymous
 
+policies_file: policies.yaml   # relative to this file
+approval_timeout_s: 120
+admin_token_env: ADMIN_TOKEN    # REST API key for /api/approvals
+
 pipeline:
-  request: [audit]
-  response: []
+  # pii_mask runs before policy so approvals and audit rows only ever see masked arguments.
+  request: [auth, pii_mask, policy, injection_scan, audit]
+  response: [pii_mask, injection_scan]
+
+middlewares:
+  pii_mask:
+    entities: [IBAN_CODE, EMAIL_ADDRESS, PHONE_NUMBER, CREDIT_CARD, US_SSN]
+    min_score: 0.5
+    model: en_core_web_sm
+  injection_scan:
+    detector: rules
+    threshold: 0.5
+    on_description: hide    # hide | sanitize | flag | off
+    on_argument: block      # block | flag | off
+    on_response: sanitize   # sanitize | block | flag | off

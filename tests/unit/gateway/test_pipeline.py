@@ -11,6 +11,7 @@ from gateway.pipeline.base import Middleware
 from gateway.pipeline.context import CallContext, ListContext
 from gateway.pipeline.errors import PipelineDenied, UnknownToolError
 from gateway.pipeline.runner import Pipeline
+from gateway.services import Services
 
 
 class Recorder(Middleware):
@@ -172,7 +173,7 @@ def test_registry_unknown_middleware() -> None:
         {"servers": {"s": {"transport": "stdio", "command": "x"}}, "pipeline": {"request": ["nope"]}}
     )
     with pytest.raises(ValueError, match="unknown middleware"):
-        build_pipeline(cfg)
+        build_pipeline(cfg, Services(cfg))
 
 
 def test_registry_audit_needs_database_url() -> None:
@@ -180,13 +181,13 @@ def test_registry_audit_needs_database_url() -> None:
         {"servers": {"s": {"transport": "stdio", "command": "x"}}, "pipeline": {"request": ["audit"]}}
     )
     with pytest.raises(ValueError, match="DATABASE_URL"):
-        build_pipeline(cfg)
+        build_pipeline(cfg, Services(cfg))
 
 
 def test_registry_shares_instances() -> None:
     made: list[str] = []
 
-    def factory(cfg: GatewayConfig) -> Middleware:
+    def factory(cfg: GatewayConfig, services: Services) -> Middleware:
         made.append("x")
         return Middleware()
 
@@ -196,6 +197,6 @@ def test_registry_shares_instances() -> None:
             "pipeline": {"request": ["m"], "response": ["m"]},
         }
     )
-    pipe = build_pipeline(cfg, {"m": factory})
+    pipe = build_pipeline(cfg, Services(cfg), {"m": factory})
     assert made == ["x"]
     assert pipe.request[0] is pipe.response[0]

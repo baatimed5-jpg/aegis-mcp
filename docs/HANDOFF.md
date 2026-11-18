@@ -1,40 +1,40 @@
 # Handoff
 
-**Phase just finished:** Phase 2 (pass-through gateway, pipeline, audit log), 2026-11-18, committed.
-**Next phase:** Phase 3 (auth, policies, approvals, PII, rule-based injection scan, malicious server).
+**Phase just finished:** Phase 3 (auth, policies, approvals, PII, rule injection scan, malicious server), 2026-11-18, committed.
+**Next phase:** Phase 4 (assistant agent + benchmark tasks + baseline evaluation, no optimization).
 
 ## Files created/changed
-gateway/{config,namespacing,downstream,mcp_facade,app,__main__}.py · gateway/pipeline/{context,base,
-runner,errors}.py · gateway/middlewares/{audit,registry}.py · gateway/db/{models,session}.py +
-migrations/ (Alembic async, rev 8c6334be1acc: experiment_run, audit_call) · alembic.ini ·
-config/gateway.yaml · tests/unit/gateway/* · tests/integration/test_gateway_e2e.py ·
-deps pinned: fastapi 0.164.0, sqlalchemy 2.1.9, asyncpg 0.32.0, alembic 1.20.1, pyyaml 6.0.3 · D17–D20.
+gateway/{store,services,policy,approvals,pii}.py · gateway/middlewares/{access,pii,injection}.py (+audit, registry)
+· gateway/detectors/{base,rules}.py · gateway/api/approvals.py · gateway/pipeline/content.py (JSON string walk
+over structured + text copies) · migration 0ad1213972fb (approval, security_event) · servers/malicious/ ·
+config/{gateway,policies}.yaml · tests: unit/gateway/test_{access,pii,injection}.py, integration/
+{conftest,helpers,test_security_e2e}.py · deps: presidio-analyzer 2.2.366, en-core-web-sm 3.8.0 (wheel URL) · D21–D25.
 
 ## How to run and test
-- PATH: uv at %APPDATA%\Python\Python312\Scripts. `docker compose up -d postgres redis`.
-- Local Postgres is on host port **5433** (a native PostgreSQL owns 5432, D17); `.env` is set up.
-- `uv run alembic upgrade head` · `uv run python -m servers.wealth` · `uv run python -m gateway`
-  → http://127.0.0.1:8000/mcp (+ /healthz). Stdio: `python -m gateway --stdio --agent assistant`.
-- `uv run pytest` (76 pass, 91% cov; integration tests create+migrate DB `aegis_test`).
+- PATH: uv at %APPDATA%\Python\Python312\Scripts. `docker compose up -d postgres redis`; `uv run alembic upgrade head`.
+- `.env` now has AGENT_TOKEN_ASSISTANT, AGENT_TOKEN_REDTEAM, ADMIN_TOKEN (generated, never print them).
+- HTTP agents must send `Authorization: Bearer <key>` (test helper: `streamable_http_client(url, http_client=
+  httpx2.AsyncClient(headers=...))`). Stdio: `--agent <id>` is trusted. Admin: `GET/POST /api/approvals[/{id}]`.
+- `uv run pytest` → 155 pass (~70 s, 90% cov). Integration tests spawn wealth+malicious+gateway processes.
 
-## Key facts for Phase 3
-- Middleware = subclass `gateway.pipeline.base.Middleware`, register a factory in
-  `middlewares/registry.py::FACTORIES`, add its name to `pipeline.request/response` in gateway.yaml.
-- Deny with `raise PipelineDenied(reason, code, status="denied"|"blocked"|"timeout")`; runner turns it
-  into `isError` + audit status. Metrics for audit go in `ctx.extra` (injection_score, pii_entities, ...).
-- HTTP agent id is `config.default_agent` today: the facade's `resolve_agent(ctx)` gets the
-  `ServerRequestContext`; `ctx.request` is the Starlette request (read `Authorization: Bearer` there).
-  Stdio agent = `--agent`. `CallContext.meta` holds the caller's `_meta` (D4).
-- Tests: never open the gateway in an async pytest fixture (anyio cancel-scope error); use an
-  `asynccontextmanager` inside the test (see tests/unit/gateway/test_gateway_inprocess.py).
+## Key facts for Phase 4
+- Pipeline (gateway.yaml): request [auth, pii_mask, policy, injection_scan, audit]; response [pii_mask, injection_scan].
+  For the *baseline* run, decide with the user whether security stays on (it changes results: PII masked).
+- `wealth__transfer_funds` needs approval for `assistant` → the call blocks up to `approval_timeout_s` (120 s).
+  The agent's MCP client read timeout must exceed it, or benchmark tasks must avoid transfers / auto-approve.
+- PII masks emails/IBANs/SSNs/phones in results: benchmark questions must not expect those values.
+- Malicious server is `enabled: false` in gateway.yaml; enable it only for security evaluation.
+- `ctx.extra` keys used: injection_score, pii_entities, pii_entities_arguments, security_events, approval_id,
+  injection_sanitized. Audit columns tokens_before/after and cost_saved_usd are still empty (Phase 5).
 
 ## Known issues / open points
-- Downstream result `_meta` (serverInfo "wealth") is passed through to agents (D18); revisit if unwanted.
-- No `tools/list_changed` refresh yet. CI not yet run on GitHub (no remote). Audit stores raw args
-  (masking comes with PII in Phase 3).
-- D4, benign sample count, Presidio model, Gemini model id: still open.
+- Rule detector tuned on our own payloads (all 10 caught, 0 false positives on 8 benign texts and 30k wealth
+  strings) → fair numbers only in Phase 6. Presidio misses ~13% of Faker phone formats (D23).
+- Approvals are in-memory (single gateway instance, D7). Unauthenticated `tools/list` returns an empty list.
+- No `tool_registry` table yet (description verdicts are cached in memory, events stored once per process).
+- Still open: D4 (`_meta` from Agents SDK), Gemini model id, benign sample count. CI not run on GitHub (no remote).
 
-## First steps for Phase 3
-1. Read PROJECT_SPEC §9 Phase 3, ARCHITECTURE §1.2 + §5, DECISIONS D2, D5, D7, D10.
-2. Ask the user before adding Presidio/spaCy model (size) and confirm the policy YAML format.
-3. Build auth → policy → approval → pii_mask → injection_scan (rules), then servers/malicious.
+## First steps for Phase 4
+1. Read PROJECT_SPEC §9 Phase 4 + §8 (evaluation), ARCHITECTURE task list Phase 4, DECISIONS D4, D6.
+2. Ask the user: Gemini model id + API key availability, security on/off for the baseline, transfer handling.
+3. Verify Agents SDK + LiteLLM against the installed sources before writing the agent.
