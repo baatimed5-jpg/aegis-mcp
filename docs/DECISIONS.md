@@ -64,3 +64,29 @@ Format: **Decision**, then *Alternatives*, then *Reason*. Numbering follows ARCH
 ## D11: Single uv project with dependency groups
 - *Alternatives*: a uv workspace with one package per component.
 - *Reason*: fewer moving parts for a single developer. The groups keep the runtime image lean.
+
+## D12: mcp SDK 2.x (`MCPServer`), pinned 2.3.0
+- *Alternatives*: pin `mcp<2` and use the v1 `FastMCP` API.
+- *Reason*: 2.x is the current major version (FastMCP was renamed `MCPServer`); its `Client` connects
+  in-process to a server instance, which makes MCP-level unit tests cheap. Pinned exactly.
+
+## D13: uv installed with `pip install --user uv`
+- *Alternatives*: the official PowerShell installer script.
+- *Reason*: running a downloaded script was blocked by the local safety policy; the PyPI wheel is the
+  same binary. CI installs the same pinned version (`uv==0.13.9`).
+
+## D14: Fixed valuation date and UTC timestamps in the wealth data
+- *Alternatives*: dates relative to "today"; naive datetimes.
+- *Reason*: a fixed `AS_OF = 2026-10-30` keeps data identical across days (reproducible evaluation).
+  Timestamps carry UTC because JSON Schema `date-time` needs an offset: the MCP Inspector rejected
+  naive ones (bug found in the Phase 1 manual check, regression test added).
+
+## D15: Wealth tool logic in `WealthService`, MCP layer kept thin
+- *Alternatives*: logic directly inside the `@tool` functions.
+- *Reason*: plain-Python unit tests, and the same logic can be reused by evaluation scripts.
+  `transfer_funds` validates and returns the would-be balances but never mutates data.
+  `get_client` also accepts a unique name fragment so the agent can find a client from a question.
+
+## D16: pre-commit uses local hooks via `uv run`
+- *Alternatives*: pinned hook repos (ruff-pre-commit, mirrors-mypy).
+- *Reason*: one source of versions (uv.lock); hooks and CI run the exact same tools.

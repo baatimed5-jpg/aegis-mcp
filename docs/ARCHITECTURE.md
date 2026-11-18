@@ -317,12 +317,12 @@ approval_timeout_s: 120
 ## 6. Task list (per phase)
 
 **Phase 1: repo and wealth server**
-- [ ] Install uv (user-level), `uv init`, pin Python 3.12, add pinned dependencies
-- [ ] ruff, mypy (strict on `gateway/`), pytest + asyncio + coverage, pre-commit
-- [ ] docker-compose: postgres:16, redis:7 (+ healthchecks); `.env.example`; `.gitignore`
-- [ ] GitHub Actions CI: lint, type check, tests (with service containers)
-- [ ] Wealth data generator (seeded) + 6 tools (transfer_funds simulated) + unit tests
-- [ ] Manual check with MCP Inspector on :8001
+- [x] Install uv (user-level), `uv init`, pin Python 3.12, add pinned dependencies
+- [x] ruff, mypy (strict on `gateway/`), pytest + asyncio + coverage, pre-commit
+- [x] docker-compose: postgres:16, redis:7 (+ healthchecks); `.env.example`; `.gitignore`
+- [x] GitHub Actions CI: lint, type check, tests (with service containers)
+- [x] Wealth data generator (seeded) + 6 tools (transfer_funds simulated) + unit tests
+- [x] Manual check with MCP Inspector on :8001
 
 **Phase 2: pass-through gateway**
 - [ ] Config loader (Pydantic), namespacing, downstream manager (multi-server)

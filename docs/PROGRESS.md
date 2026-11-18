@@ -1,7 +1,7 @@
 # Progress
 
 - [x] Phase 0: Plan (architecture, diagrams, session files): approved 2026-11-18
-- [ ] Phase 1: Repo setup + wealth MCP server + fake data
+- [x] Phase 1: Repo setup + wealth MCP server + fake data: done 2026-11-18 (36 tests, Inspector check)
 - [ ] Phase 2: Gateway pass-through proxy, pipeline, audit log
 - [ ] Phase 3: Auth, policies, approvals, PII, rule-based injection scan, malicious server
 - [ ] Phase 4: Assistant agent + benchmark + baseline evaluation
