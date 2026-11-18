@@ -24,7 +24,7 @@ gateway/ (pipeline/, middlewares/, detectors/, db/, api/) · ml/ (injection/, pr
 agents/ (assistant, redteam) · evaluation/ · dashboard/ · tests/ (unit/, integration/) · docs/
 
 ## Ports
-gateway 8000 · wealth 8001 · malicious 8002 · dashboard 4200 · postgres 5432 · redis 6379
+gateway 8000 · wealth 8001 · malicious 8002 · dashboard 4200 · postgres 5432 (local .env: 5433, D17) · redis 6379
 
 ## Commands (available from Phase 1)
 - Install: `uv sync --all-groups`
@@ -32,6 +32,7 @@ gateway 8000 · wealth 8001 · malicious 8002 · dashboard 4200 · postgres 5432
 - Test: `uv run pytest` (unit only: `uv run pytest tests/unit`)
 - Lint/types: `uv run ruff check . && uv run ruff format --check . && uv run mypy`
 - Wealth server: `uv run python -m servers.wealth` (:8001)
+- DB migrations: `uv run alembic upgrade head`
 - Gateway: `uv run python -m gateway` (HTTP :8000) · `uv run python -m gateway --stdio --agent <id>`
 
 ## Engineering rules

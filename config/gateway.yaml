@@ -1,0 +1,15 @@
+# AegisMCP gateway configuration. Secrets (DATABASE_URL, agent tokens) come from the environment / .env.
+servers:
+  wealth: {transport: streamable_http, url: http://127.0.0.1:8001/mcp}
+  # Same server launched as a subprocess instead:
+  # wealth: {transport: stdio, command: python, args: ["-m", "servers.wealth", "--stdio"]}
+
+agents:
+  assistant: {token_env: AGENT_TOKEN_ASSISTANT}
+
+# Until API-key auth exists (Phase 3), HTTP callers are recorded under this agent id.
+default_agent: anonymous
+
+pipeline:
+  request: [audit]
+  response: []

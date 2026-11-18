@@ -90,3 +90,29 @@ Format: **Decision**, then *Alternatives*, then *Reason*. Numbering follows ARCH
 ## D16: pre-commit uses local hooks via `uv run`
 - *Alternatives*: pinned hook repos (ruff-pre-commit, mirrors-mypy).
 - *Reason*: one source of versions (uv.lock); hooks and CI run the exact same tools.
+
+## D17: Docker Postgres host port configurable (`POSTGRES_PORT`, 5433 locally)
+- *Alternatives*: stop the native PostgreSQL of another project; keep 5432.
+- *Reason*: on the dev laptop a native PostgreSQL (another project) also listens on 0.0.0.0:5432 and
+  silently took the connections. Compose defaults to 5432 (CI unchanged); the local `.env` uses 5433.
+
+## D18: Gateway is a low-level `Server`; downstream results pass through unchanged
+- **Decision**: the facade uses `mcp.server.lowlevel.Server` with dynamic `on_list_tools`/`on_call_tool`.
+  Tools keep their description, schemas and annotations, only renamed `<server>__<tool>`. The
+  downstream `CallToolResult` is returned as is (including its `_meta`). The agent's `_meta` is kept
+  in `CallContext.meta` for middlewares (D4) but not forwarded downstream; SDK-reserved keys are dropped.
+- *Alternatives*: `MCPServer` with generated wrapper functions; forwarding `_meta`.
+- *Reason*: dynamic tool lists need the low-level API; byte-identical results are the Phase 2 test.
+
+## D19: Audit = two writes (upsert), and failures fail closed
+- **Decision**: `on_request` writes the row `in_progress` before the downstream call; `on_complete`
+  upserts the final state (`INSERT ... ON CONFLICT (id) DO UPDATE`), so calls denied before the audit
+  step are still recorded. If the request-side write fails, the call is refused (`error`). Unknown tool
+  names go through the pipeline too, so they are audited. Downstream `isError` results get status `error`.
+- *Alternatives*: a single write at the end; fail open when the DB is down.
+- *Reason*: a crash mid-call still leaves a trace; an unaudited high-risk call is worse than a refused one.
+
+## D20: One process = one long-lived client session per downstream server
+- **Decision**: `DownstreamManager` opens one `mcp.Client` per enabled server at startup (HTTP or stdio,
+  plus in-process servers for tests) and discovers tools once (`refresh()`, pagination followed).
+- *Reason*: no per-call handshake latency. Tool-list refresh on `list_changed` is left for later.

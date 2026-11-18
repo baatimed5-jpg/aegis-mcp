@@ -325,10 +325,10 @@ approval_timeout_s: 120
 - [x] Manual check with MCP Inspector on :8001
 
 **Phase 2: pass-through gateway**
-- [ ] Config loader (Pydantic), namespacing, downstream manager (multi-server)
-- [ ] MCP facade (low-level server, dynamic tools), Streamable HTTP + stdio
-- [ ] Pipeline runner + Middleware base + Audit middleware + DB models + Alembic
-- [ ] Integration test: direct call == gateway call; audit row per call
+- [x] Config loader (Pydantic), namespacing, downstream manager (multi-server)
+- [x] MCP facade (low-level server, dynamic tools), Streamable HTTP + stdio
+- [x] Pipeline runner + Middleware base + Audit middleware + DB models + Alembic
+- [x] Integration test: direct call == gateway call; audit row per call
 
 **Phase 3: security**
 - [ ] Auth, policies (YAML rules), approval queue (REST + timeout), PII (Presidio)
