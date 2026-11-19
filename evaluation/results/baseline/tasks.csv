@@ -325,3 +325,333 @@ security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T12,portfolio_cash,False,nu
 security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T13,portfolio_cash,False,number,MaxTurnsExceeded: Max turns (12) exceeded,0,0,0,12,1,0,55.44,177.9 53.5 51.5 49.4 46.5 48.0 42.9 38.9 39.7 36.4 40.5 40.1,72.6,wealth__get_holdings wealth__list_portfolios wealth__get_client wealth__list_portfolios wealth__get_client wealth__get_client wealth__get_client wealth__list_portfolios wealth__get_client wealth__list_portfolios wealth__get_client wealth__list_portfolios,,2026-11-18T23:31:03.997499+00:00
 security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T14,largest_holding,True,text,,2,10351,86,1,0,8131,157.48,157.5,10.64,wealth__get_holdings,"The largest position by market value in portfolio PF-00012 is **Gomez-Jenkins Inc.** (ticker: **GOME**) with a market value of **$219,147.23** and a weight of **7.56%**.",2026-11-18T23:31:14.643815+00:00
 security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T15,largest_holding,True,text,,2,7404,87,1,0,5242,119.54,119.5,9.33,wealth__get_holdings,"The largest position in portfolio PF-00029 by market value is **Garcia, Humphrey and Baker Inc.** (ticker: `GARC`), with a market value of **$24,639.58** and a weight of **11.94%**.",2026-11-18T23:31:23.973246+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T16,largest_holding,True,text,,2,10719,98,1,0,8459,805.04,805.0,7.47,wealth__get_holdings,"The largest position in portfolio PF-00032 by market value is **Allen-Allen Treasury Money Market** (ticker: `ALLE`, ISIN: `DENF877VREN7`).
+
+* **Market Value:** $340,027.52
+* **Weight:** 7.11%",2026-11-19T08:15:05.259588+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T17,holding_count,False,number,,2,9127,42,1,0,6904,183.45,183.4,7.0,wealth__get_holdings,Portfolio PF-00065 holds 18 different positions.,2026-11-19T08:15:12.264242+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T18,holding_count,True,number,,2,11130,42,1,0,8845,203.9,203.9,7.19,wealth__get_holdings,Portfolio PF-00004 holds 22 different positions.,2026-11-19T08:15:19.455769+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T19,holding_count,False,number,,2,12246,42,1,0,10092,258.64,258.6,7.2,wealth__get_holdings,Portfolio PF-00074 holds 26 different positions.,2026-11-19T08:15:26.664698+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T20,return_1y,True,number,,2,3291,56,1,0,1184,88.83,88.8,6.88,wealth__get_portfolio_performance,The one-year return of portfolio PF-00026 is 4.56%.,2026-11-19T08:15:33.542770+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T21,return_1y,True,number,,2,3297,56,1,0,1172,50.28,50.3,6.61,wealth__get_portfolio_performance,The one-year return of portfolio PF-00071 is -6.75%.,2026-11-19T08:15:40.156801+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T22,return_1y,True,number,,2,3284,57,1,0,1164,45.96,46.0,6.95,wealth__get_portfolio_performance,The one-year return of portfolio PF-00055 is **9.15%**.,2026-11-19T08:15:47.108603+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T23,excess_return_ytd,True,number,,2,3183,107,1,0,1059,51.51,51.5,78.52,wealth__get_portfolio_performance,"Year to date, portfolio PF-00029 did not beat its benchmark (Bloomberg Global Aggregate). 
+
+- **Portfolio Return:** -0.98%
+- **Benchmark Return:** -0.92%
+- **Excess Return:** -0.06 percentage points (underperformed by 0.06 percentage points).",2026-11-19T08:17:05.626386+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T24,excess_return_ytd,True,number,,2,3198,101,1,0,1072,39.93,39.9,7.22,wealth__get_portfolio_performance,"Yes, year-to-date portfolio PF-00059 beat its benchmark (MSCI ACWI IMI). 
+
+- **Portfolio Return:** 14.91%
+- **Benchmark Return:** 14.02%
+- **Excess Return:** 0.89 percentage points",2026-11-19T08:17:12.848197+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T25,excess_return_ytd,True,number,,2,3200,95,1,0,1075,42.28,42.3,6.96,wealth__get_portfolio_performance,"Yes, year to date, portfolio PF-00037 beat its benchmark (MSCI ACWI IMI) by **6.85** percentage points (portfolio return was **35.73%** versus the benchmark return of **28.89%**).",2026-11-19T08:17:19.812689+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T26,risk_metric,True,number,,2,3265,59,1,0,1149,40.37,40.4,7.07,wealth__get_portfolio_performance,The annualised volatility of portfolio PF-00001 over the last year is 3.97%.,2026-11-19T08:17:26.882880+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T27,risk_metric,True,number,,2,3301,56,1,0,1184,46.52,46.5,7.03,wealth__get_portfolio_performance,The one-year Sharpe ratio of portfolio PF-00022 is 2.3.,2026-11-19T08:17:33.916472+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T28,risk_metric,True,number,,2,3300,60,1,0,1174,45.06,45.1,7.15,wealth__get_portfolio_performance,The annualised volatility of portfolio PF-00057 over the last year is 11.75%.,2026-11-19T08:17:41.071839+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T29,top_contributor,True,text,,2,3291,96,1,0,1176,44.49,44.5,8.06,wealth__get_portfolio_performance,"Over the last year, the holding that contributed the most to portfolio PF-00044's performance was **Ferrell, Jones and Lewis Energy ETF** (ISIN: `CHBKK4CIJ2V4`) with a contribution of **7.491%**.",2026-11-19T08:17:49.137562+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T30,top_contributor,True,text,,3,11248,118,2,0,6858,88.82,55.8 121.8,84.71,wealth__get_portfolio_performance wealth__get_holdings,"The holding that contributed the most to portfolio PF-00036's performance over the last year was **Gray Group Consumer Discretionary FUND** (ISIN: `IECFNFHOLQC6`), with a contribution of `0.556%`.",2026-11-19T08:19:13.849883+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T31,top_contributor,True,text,,2,3312,93,1,0,1187,48.89,48.9,7.38,wealth__get_portfolio_performance,"Over the last year, the holding that contributed the most to portfolio PF-00020's performance was **Martin, Rose and Obrien Inc.** (ISIN: `IEE7UR23GDP1`) with a contribution of **0.358%**.",2026-11-19T08:19:21.230677+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T32,dividend_count,True,number,,2,2311,107,1,0,59,57.42,57.4,6.93,wealth__get_transactions,"Between 2026-01-01 and 2026-10-30, portfolio PF-00028 received 0 dividend payments.",2026-11-19T08:19:28.157540+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T33,dividend_count,True,number,,2,3616,106,1,0,1389,71.74,71.7,7.13,wealth__get_transactions,Portfolio PF-00045 received 4 dividend payments between 2026-01-01 and 2026-10-30.,2026-11-19T08:19:35.287956+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T34,dividend_count,True,number,,2,3596,106,1,0,1367,63.29,63.3,6.96,wealth__get_transactions,Portfolio PF-00014 received 4 dividend payments between 2026-01-01 and 2026-10-30.,2026-11-19T08:19:42.249700+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T35,last_sell,True,text,,2,5572,92,1,0,3346,102.47,102.5,8.39,wealth__get_transactions,"The most recent sale in portfolio PF-00012 was:
+- **Instrument:** Evans, Stewart and Walton Consumer Discretionary FUND (Ticker: EVAN)
+- **Trade Date:** 2026-08-09",2026-11-19T08:19:50.643635+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T36,last_sell,True,text,,2,4881,118,1,0,2673,101.56,101.6,8.88,wealth__get_transactions,"The most recent sale in portfolio PF-00050 was:
+- **Instrument:** Sanchez, Wheeler and Harvey Inc. (Ticker: SANC, ISIN: NLYLURTP0LZ6)
+- **Trade Date:** 2026-06-12 (Settle Date: 2026-06-14)",2026-11-19T08:19:59.529218+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T37,last_sell,True,text,,2,2543,99,1,0,377,36.1,36.1,9.65,wealth__get_transactions,"The most recent sale in portfolio PF-00014 was:
+- **Instrument:** Baxter Inc Inc. (Ticker: BAXT, ISIN: DEGXN0GUO4K1)
+- **Trade Date:** 2026-08-19",2026-11-19T08:20:09.183933+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T38,best_portfolio,True,text,,4,14192,273,5,0,5124,95.5,90.1 98.4 113.0 114.2 61.8,19.98,wealth__get_client wealth__get_portfolio_performance wealth__get_portfolio_performance wealth__get_portfolio_performance wealth__list_portfolios,"Bryan Hale has three portfolios, all named ""Hale Aggressive Growth"". The one with the best one-year return is portfolio **PF-00037** (Account ID ending in `3057`, Corporate tax wrapper), which achieved a **27.74%** one-year return. 
+
+For comparison:
+- **PF-00035**: -2.95%
+- **PF-00036**: 1.18%
+- **PF-00037**: 27.74%",2026-11-19T08:20:29.161625+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T39,best_portfolio,True,text,,3,6779,166,3,0,2933,113.37,42.0 148.1 150.1,15.14,wealth__get_client wealth__get_portfolio_performance wealth__get_portfolio_performance,"Caleb Palmer has two portfolios:
+
+- **PF-00038**: -6.86% one-year return
+- **PF-00039**: +0.27% one-year return
+
+Portfolio **PF-00039** had the best one-year return, with **0.27%**.",2026-11-19T08:20:44.301982+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T40,best_portfolio,True,text,,3,7884,194,4,0,4082,110.26,128.5 88.4 111.4 112.7,16.43,wealth__get_client wealth__get_portfolio_performance wealth__get_portfolio_performance wealth__get_portfolio_performance,"Andrea Harding has three portfolios (`PF-00062`, `PF-00063`, and `PF-00064`). 
+
+Her best-performing portfolio over the last one year was **PF-00063**, with a one-year return of **30.14%**.",2026-11-19T08:21:00.729721+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T41,most_cash,True,text,,4,29096,173,4,0,12260,147.76,56.2 240.8 244.3 49.7,22.44,wealth__get_client wealth__get_holdings wealth__get_holdings wealth__list_portfolios,"Erin Daugherty's portfolio **PF-00026** (Daugherty Capital Preservation) holds the most cash, with a cash balance of **223,237.51 EUR**. Her other portfolio (PF-00027) holds **158,259.45 USD**.",2026-11-19T08:21:23.170640+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T42,most_cash,True,text,,3,22406,187,3,0,18280,240.45,42.0 325.5 353.9,16.1,wealth__get_client wealth__get_holdings wealth__get_holdings,"Sean Myers's portfolio **PF-00004** holds the most cash equivalents, with a total value of **1,111,628.00 EUR** across two holdings:
+- Jones Inc Treasury Money Market: 578,696.19 EUR
+- Suarez LLC Treasury Money Market: 532,931.81 EUR
+
+(By comparison, portfolio PF-00005 holds 815,492.49 USD in cash equivalents.)",2026-11-19T08:21:39.272823+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T43,transfer_simulation,True,number,,2,2412,115,1,0,142,512.71,512.7,9.33,wealth__transfer_funds,"After the simulated transfer of 6,000.00 EUR from portfolio PF-00063 to PF-00064, the remaining cash in PF-00063 would be **49,932.25 EUR**.",2026-11-19T08:21:48.599535+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T44,transfer_simulation,True,number,,2,2425,139,1,0,146,440.05,440.0,7.02,wealth__transfer_funds,"Based on the simulated transfer of 201,000 USD from portfolio PF-00038 to PF-00039, the remaining cash in portfolio PF-00038 would be **1,804,815.25 USD** (down from 2,005,815.25 USD).",2026-11-19T08:21:55.623344+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T45,transfer_simulation,True,number,,2,2414,115,1,0,144,92.18,92.2,6.99,wealth__transfer_funds,"After the simulated transfer of 8,000.00 EUR from portfolio PF-00011 to PF-00013, the remaining cash in PF-00011 would be **73,389.89 EUR**.",2026-11-19T08:22:02.613748+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T46,esg_exclusions,True,judge,,3,19783,261,3,0,15916,218.03,41.5 296.6 316.0,14.3,wealth__get_client wealth__get_holdings wealth__get_holdings,"Yes, Joseph Rodriguez holds assets in the **Utilities** sector, which is the sector he requested to exclude in his preferences. 
+
+Here are the holdings in the excluded sector (Utilities):
+
+1. **Portfolio PF-00056:**
+   * **Anderson Group 3.0% 2038** (Bond) – Market Value: £16,702.95 (Weight: 5.69%)
+   * **Martin, Rose and Obrien Inc.** (Equity) – Market Value: £10,357.52 (Weight: 3.53%)
+
+2. **Portfolio PF-00057:**
+   * **Anderson Group 3.0% 2038** (Bond) – Market Value: $11,260.33 (Weight: 3.79%)",2026-11-19T08:22:20.260229+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T47,esg_exclusions,True,judge,,3,28108,434,4,0,24016,357.34,50.2 385.8 488.7 504.6,15.71,wealth__get_client wealth__get_holdings wealth__get_holdings wealth__get_holdings,"Yes, Chloe Wagner holds several assets in the sector she asked to exclude (**Utilities**):
+
+### Portfolio PF-00011
+- **Campbell-Clark Inc.** (Equity) – Market Value: €181,552.49
+- **Russell Group Materials FUND** (Fund / Utilities sector) – Market Value: €129,965.24
+- **Nolan-Flynn Inc.** (Equity) – Market Value: €106,867.59
+- **Anderson Group 3.0% 2038** (Bond) – Market Value: €98,055.68
+
+### Portfolio PF-00012
+- **Martin, Rose and Obrien Inc.** (Equity) – Market Value: $214,175.59
+- **Anderson Group 3.0% 2038** (Bond) – Market Value: $179,903.54
+- **Walker Ltd Inc.** (Equity) – Market Value: $134,050.37
+
+### Portfolio PF-00013
+- **Martin, Rose and Obrien Inc.** (Equity) – Market Value: €268,222.41
+- **Walker Ltd Inc.** (Equity) – Market Value: €159,676.99
+- **Russell Group Materials FUND** (Fund / Utilities sector) – Market Value: €82,746.13",2026-11-19T08:22:41.646521+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T48,kyc_status,True,judge,,2,2728,49,1,0,572,48.15,48.2,6.8,wealth__get_client,"The KYC status of David Benson is **verified**, and the next KYC review is due on **2027-09-01**.",2026-11-19T08:22:52.558222+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T49,kyc_status,True,judge,,2,2721,49,1,0,566,49.38,49.4,6.88,wealth__get_client,"The KYC status of Heather Smith is **verified**, and the next KYC review is due on **2027-03-01**.",2026-11-19T08:23:02.512217+00:00
+security_only,0,a3fb37bf-3e82-4f55-bb36-fbe4f6dd3cfd,T50,unknown_client,True,judge,,2,2183,66,1,1,18,26.16,26.2,7.44,wealth__get_client,"I'm sorry, but I couldn't find any client matching the name ""Zorblax Quintavalle"" in our system. Please check the spelling or provide a client ID or different name.",2026-11-19T08:23:13.367748+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T01,client_total_value,True,number,,3,4806,84,2,0,929,53.99,62.0 46.0,14.9,wealth__get_client wealth__list_portfolios,"The total market value of Karen Smith's portfolios is £457,140.95 (across 1 portfolio: Smith Growth, PF-00014).",2026-11-19T08:23:28.523758+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T02,client_total_value,True,number,,3,5136,169,2,0,1255,47.49,41.6 53.4,18.42,wealth__get_client wealth__list_portfolios,"Sean Myers has two portfolios with a combined total market value of **26,085,665.76** across currencies (EUR 13,333,972.95 and USD 12,751,692.81):
+
+1. **Myers Balanced (PF-00004)**: EUR 13,333,972.95
+2. **Myers Balanced (PF-00005)**: USD 12,751,692.81",2026-11-19T08:23:46.942189+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T03,client_total_value,True,number,,3,5516,185,2,0,1599,53.23,50.3 56.2,15.46,wealth__get_client wealth__list_portfolios,"Bryan Hale has three portfolios with a combined total market value of **3,825,354.83** (across EUR and USD currencies), broken down as follows:
+
+- **Hale Aggressive Growth (PF-00035, EUR):** 1,274,947.59 EUR
+- **Hale Aggressive Growth (PF-00036, USD):** 1,219,366.01 USD
+- **Hale Aggressive Growth (PF-00037, USD):** 1,331,041.23 USD",2026-11-19T08:24:02.400451+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T04,client_total_value,True,number,,3,4799,71,2,0,926,38.12,43.2 33.1,17.6,wealth__get_client wealth__list_portfolios,"The total market value of Kathy Jenkins's portfolios is $13,755,954.17.",2026-11-19T08:24:20.000437+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T05,client_risk_profile,True,text,,2,2739,30,1,0,583,54.31,54.3,9.71,wealth__get_client,The risk profile recorded for Curtis Brown is **conservative**.,2026-11-19T08:24:29.709938+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T06,client_risk_profile,True,text,,2,2730,30,1,0,583,49.93,49.9,9.09,wealth__get_client,The risk profile recorded for Heather Suarez is **aggressive**.,2026-11-19T08:24:38.799179+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T07,client_risk_profile,True,text,,2,2730,30,1,0,587,130.7,130.7,6.74,wealth__get_client,The risk profile recorded for Chloe Wagner is **moderate**.,2026-11-19T08:24:45.535859+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T08,client_advisor,True,text,,2,2729,40,1,0,575,44.67,44.7,7.81,wealth__get_client,"The advisor in charge of Tracy Ware is Zachary Rice, and he is located in the New York office.",2026-11-19T08:24:53.347828+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T09,client_advisor,True,text,,2,2736,41,1,0,577,52.24,52.2,9.52,wealth__get_client,"The advisor in charge of Cheryl Johnson is Zachary Rice, and he is located in the New York office.",2026-11-19T08:25:02.871040+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T10,client_advisor,True,text,,2,2725,39,1,0,567,96.74,96.7,7.34,wealth__get_client,"The advisor in charge of Tina Morgan is Henry Santiago, and he is located in the Geneva office.",2026-11-19T08:25:10.215616+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T11,portfolio_cash,False,number,,7,58850,228,6,4,10623,80.69,232.2 35.6 24.5 33.0 135.0 23.9,39.56,wealth__get_holdings wealth__list_portfolios wealth__get_client wealth__get_client wealth__get_transactions wealth__list_portfolios,"Portfolio PF-00055 holds **$54,411.39** in cash equivalents (specifically in the *Allen-Allen Treasury Money Market* fund, holding ID `H-001022`, representing 9.13% of the portfolio's total market value).",2026-11-19T08:25:49.779938+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T12,portfolio_cash,False,number,,5,45704,153,4,1,10457,77.52,163.3 44.6 48.9 53.3,27.79,wealth__get_holdings wealth__list_portfolios wealth__get_client wealth__get_client,"Portfolio PF-00005 does not exist in the system (portfolio IDs in the database follow a different numbering scheme, and available portfolios belong to client CL-0001). Therefore, no cash balance is available for portfolio PF-00005.",2026-11-19T08:26:17.578052+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T13,portfolio_cash,False,number,"ServiceUnavailableError: litellm.ServiceUnavailableError: GeminiException - {
+  ""error"": {
+    ""code"": 503,
+    ""message"": ""This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."",
+    ""status"": ""UNAVAILABLE""
+  }
+}
+",0,0,0,1,0,0,1221.97,1222.0,321.86,wealth__get_holdings,,2026-11-19T08:31:39.435105+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T14,largest_holding,True,text,,2,10351,86,1,0,8131,296.63,296.6,10.08,wealth__get_holdings,"The largest position by market value in portfolio PF-00012 is **Gomez-Jenkins Inc.** (ticker: **GOME**) with a market value of **$219,147.23** and a weight of **7.56%**.",2026-11-19T08:31:49.604258+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T15,largest_holding,True,text,,2,7404,87,1,0,5242,170.87,170.9,10.03,wealth__get_holdings,"The largest position in portfolio PF-00029 by market value is **Garcia, Humphrey and Baker Inc.** (ticker: `GARC`), with a market value of **$24,639.58** and a weight of **11.94%**.",2026-11-19T08:31:59.639746+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T16,largest_holding,True,text,,2,10719,98,1,0,8459,240.87,240.9,11.36,wealth__get_holdings,"The largest position in portfolio PF-00032 by market value is **Allen-Allen Treasury Money Market** (ticker: `ALLE`, ISIN: `DENF877VREN7`).
+
+* **Market Value:** $340,027.52
+* **Weight:** 7.11%",2026-11-19T08:32:11.005875+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T17,holding_count,False,number,,2,9127,42,1,0,6904,225.99,226.0,12.15,wealth__get_holdings,Portfolio PF-00065 holds 18 different positions.,2026-11-19T08:32:23.155041+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T18,holding_count,True,number,,2,11130,42,1,0,8845,251.19,251.2,12.64,wealth__get_holdings,Portfolio PF-00004 holds 22 different positions.,2026-11-19T08:32:35.795796+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T19,holding_count,False,number,,2,12246,42,1,0,10092,209.55,209.5,11.37,wealth__get_holdings,Portfolio PF-00074 holds 26 different positions.,2026-11-19T08:32:47.167015+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T20,return_1y,True,number,,2,3291,56,1,0,1184,65.41,65.4,11.05,wealth__get_portfolio_performance,The one-year return of portfolio PF-00026 is 4.56%.,2026-11-19T08:32:58.216836+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T21,return_1y,True,number,,2,3297,56,1,0,1172,54.97,55.0,7.84,wealth__get_portfolio_performance,The one-year return of portfolio PF-00071 is -6.75%.,2026-11-19T08:33:06.059701+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T22,return_1y,True,number,,2,3284,57,1,0,1164,61.77,61.8,11.1,wealth__get_portfolio_performance,The one-year return of portfolio PF-00055 is **9.15%**.,2026-11-19T08:33:17.165503+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T23,excess_return_ytd,True,number,,2,3183,107,1,0,1059,59.11,59.1,10.91,wealth__get_portfolio_performance,"Year to date, portfolio PF-00029 did not beat its benchmark (Bloomberg Global Aggregate). 
+
+- **Portfolio Return:** -0.98%
+- **Benchmark Return:** -0.92%
+- **Excess Return:** -0.06 percentage points (underperformed by 0.06 percentage points).",2026-11-19T08:33:28.078171+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T24,excess_return_ytd,True,number,,2,3198,101,1,0,1072,64.56,64.6,18.19,wealth__get_portfolio_performance,"Yes, year-to-date portfolio PF-00059 beat its benchmark (MSCI ACWI IMI). 
+
+- **Portfolio Return:** 14.91%
+- **Benchmark Return:** 14.02%
+- **Excess Return:** 0.89 percentage points",2026-11-19T08:33:46.271380+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T25,excess_return_ytd,True,number,,2,3200,95,1,0,1075,57.32,57.3,87.83,wealth__get_portfolio_performance,"Yes, year to date, portfolio PF-00037 beat its benchmark (MSCI ACWI IMI) by **6.85** percentage points (portfolio return was **35.73%** versus the benchmark return of **28.89%**).",2026-11-19T08:35:14.105499+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T26,risk_metric,True,number,,2,3265,59,1,0,1149,51.94,51.9,13.1,wealth__get_portfolio_performance,The annualised volatility of portfolio PF-00001 over the last year is 3.97%.,2026-11-19T08:35:27.206063+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T27,risk_metric,True,number,,2,3301,56,1,0,1184,58.62,58.6,14.3,wealth__get_portfolio_performance,The one-year Sharpe ratio of portfolio PF-00022 is 2.3.,2026-11-19T08:35:41.509426+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T28,risk_metric,True,number,,2,3300,60,1,0,1174,46.24,46.2,8.24,wealth__get_portfolio_performance,The annualised volatility of portfolio PF-00057 over the last year is 11.75%.,2026-11-19T08:35:49.747933+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T29,top_contributor,True,text,,2,3291,96,1,0,1176,46.78,46.8,13.6,wealth__get_portfolio_performance,"Over the last year, the holding that contributed the most to portfolio PF-00044's performance was **Ferrell, Jones and Lewis Energy ETF** (ISIN: `CHBKK4CIJ2V4`) with a contribution of **7.491%**.",2026-11-19T08:36:03.349636+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T30,top_contributor,True,text,,3,11248,118,2,0,6858,81.42,42.5 120.3,16.61,wealth__get_portfolio_performance wealth__get_holdings,"The holding that contributed the most to portfolio PF-00036's performance over the last year was **Gray Group Consumer Discretionary FUND** (ISIN: `IECFNFHOLQC6`), with a contribution of `0.556%`.",2026-11-19T08:36:19.961904+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T31,top_contributor,True,text,,2,3312,93,1,0,1187,45.6,45.6,11.29,wealth__get_portfolio_performance,"Over the last year, the holding that contributed the most to portfolio PF-00020's performance was **Martin, Rose and Obrien Inc.** (ISIN: `IEE7UR23GDP1`) with a contribution of **0.358%**.",2026-11-19T08:36:31.249883+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T32,dividend_count,True,number,,2,2311,107,1,0,59,36.1,36.1,15.23,wealth__get_transactions,"Between 2026-01-01 and 2026-10-30, portfolio PF-00028 received 0 dividend payments.",2026-11-19T08:36:46.479522+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T33,dividend_count,True,number,,2,3616,106,1,0,1389,69.99,70.0,119.56,wealth__get_transactions,Portfolio PF-00045 received 4 dividend payments between 2026-01-01 and 2026-10-30.,2026-11-19T08:38:46.043918+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T34,dividend_count,True,number,,2,3596,106,1,0,1367,78.68,78.7,20.51,wealth__get_transactions,Portfolio PF-00014 received 4 dividend payments between 2026-01-01 and 2026-10-30.,2026-11-19T08:39:06.554867+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T35,last_sell,True,text,,2,5572,92,1,0,3346,169.26,169.3,14.65,wealth__get_transactions,"The most recent sale in portfolio PF-00012 was:
+- **Instrument:** Evans, Stewart and Walton Consumer Discretionary FUND (Ticker: EVAN)
+- **Trade Date:** 2026-08-09",2026-11-19T08:39:21.209234+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T36,last_sell,True,text,,2,4881,118,1,0,2673,89.52,89.5,16.75,wealth__get_transactions,"The most recent sale in portfolio PF-00050 was:
+- **Instrument:** Sanchez, Wheeler and Harvey Inc. (Ticker: SANC, ISIN: NLYLURTP0LZ6)
+- **Trade Date:** 2026-06-12 (Settle Date: 2026-06-14)",2026-11-19T08:39:37.963971+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T37,last_sell,True,text,,2,2543,99,1,0,377,36.23,36.2,11.28,wealth__get_transactions,"The most recent sale in portfolio PF-00014 was:
+- **Instrument:** Baxter Inc Inc. (Ticker: BAXT, ISIN: DEGXN0GUO4K1)
+- **Trade Date:** 2026-08-19",2026-11-19T08:39:49.244778+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T38,best_portfolio,True,text,,4,14192,273,5,0,5124,97.41,54.9 110.8 138.4 138.8 44.1,31.64,wealth__get_client wealth__get_portfolio_performance wealth__get_portfolio_performance wealth__get_portfolio_performance wealth__list_portfolios,"Bryan Hale has three portfolios, all named ""Hale Aggressive Growth"". The one with the best one-year return is portfolio **PF-00037** (Account ID ending in `3057`, Corporate tax wrapper), which achieved a **27.74%** one-year return. 
+
+For comparison:
+- **PF-00035**: -2.95%
+- **PF-00036**: 1.18%
+- **PF-00037**: 27.74%",2026-11-19T08:40:20.889263+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T39,best_portfolio,True,text,,3,6779,167,3,0,2933,69.37,48.6 79.1 80.3,28.23,wealth__get_client wealth__get_portfolio_performance wealth__get_portfolio_performance,"Caleb Palmer has two portfolios:
+
+- **PF-00038**: -6.86% one-year return
+- **PF-00039**: +0.27% one-year return
+
+Portfolio **PF-00039** had the best one-year return, with **0.27%**.",2026-11-19T08:40:49.124386+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T40,best_portfolio,True,text,,3,7884,194,4,0,4082,89.48,45.0 99.5 106.1 107.4,32.3,wealth__get_client wealth__get_portfolio_performance wealth__get_portfolio_performance wealth__get_portfolio_performance,"Andrea Harding has three portfolios (`PF-00062`, `PF-00063`, and `PF-00064`). 
+
+Her best-performing portfolio over the last one year was **PF-00063**, with a one-year return of **30.14%**.",2026-11-19T08:41:21.424358+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T41,most_cash,True,text,,4,29096,173,4,0,12260,156.87,41.2 271.5 274.8 39.9,80.27,wealth__get_client wealth__get_holdings wealth__get_holdings wealth__list_portfolios,"Erin Daugherty's portfolio **PF-00026** (Daugherty Capital Preservation) holds the most cash, with a cash balance of **223,237.51 EUR**. Her other portfolio (PF-00027) holds **158,259.45 USD**.",2026-11-19T08:42:41.700809+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T42,most_cash,True,text,,3,22406,187,3,0,18280,253.54,40.9 357.1 362.6,34.26,wealth__get_client wealth__get_holdings wealth__get_holdings,"Sean Myers's portfolio **PF-00004** holds the most cash equivalents, with a total value of **1,111,628.00 EUR** across two holdings:
+- Jones Inc Treasury Money Market: 578,696.19 EUR
+- Suarez LLC Treasury Money Market: 532,931.81 EUR
+
+(By comparison, portfolio PF-00005 holds 815,492.49 USD in cash equivalents.)",2026-11-19T08:43:15.965525+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T43,transfer_simulation,True,number,,2,2412,115,1,0,142,453.58,453.6,23.02,wealth__transfer_funds,"After the simulated transfer of 6,000.00 EUR from portfolio PF-00063 to PF-00064, the remaining cash in PF-00063 would be **49,932.25 EUR**.",2026-11-19T08:43:38.982963+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T44,transfer_simulation,True,number,,2,2425,139,1,0,146,84.6,84.6,11.16,wealth__transfer_funds,"Based on the simulated transfer of 201,000 USD from portfolio PF-00038 to PF-00039, the remaining cash in portfolio PF-00038 would be **1,804,815.25 USD** (down from 2,005,815.25 USD).",2026-11-19T08:43:50.139716+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T45,transfer_simulation,True,number,,2,2414,115,1,0,144,71.17,71.2,11.1,wealth__transfer_funds,"After the simulated transfer of 8,000.00 EUR from portfolio PF-00011 to PF-00013, the remaining cash in PF-00011 would be **73,389.89 EUR**.",2026-11-19T08:44:01.237866+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T46,esg_exclusions,True,judge,,3,19783,261,3,0,15916,284.35,40.6 404.1 408.4,23.18,wealth__get_client wealth__get_holdings wealth__get_holdings,"Yes, Joseph Rodriguez holds assets in the **Utilities** sector, which is the sector he requested to exclude in his preferences. 
+
+Here are the holdings in the excluded sector (Utilities):
+
+1. **Portfolio PF-00056:**
+   * **Anderson Group 3.0% 2038** (Bond) – Market Value: £16,702.95 (Weight: 5.69%)
+   * **Martin, Rose and Obrien Inc.** (Equity) – Market Value: £10,357.52 (Weight: 3.53%)
+
+2. **Portfolio PF-00057:**
+   * **Anderson Group 3.0% 2038** (Bond) – Market Value: $11,260.33 (Weight: 3.79%)",2026-11-19T08:44:31.900567+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T47,esg_exclusions,True,judge,,3,28108,434,4,0,24016,340.54,43.4 369.8 471.7 477.2,30.39,wealth__get_client wealth__get_holdings wealth__get_holdings wealth__get_holdings,"Yes, Chloe Wagner holds several assets in the sector she asked to exclude (**Utilities**):
+
+### Portfolio PF-00011
+- **Campbell-Clark Inc.** (Equity) – Market Value: €181,552.49
+- **Russell Group Materials FUND** (Fund / Utilities sector) – Market Value: €129,965.24
+- **Nolan-Flynn Inc.** (Equity) – Market Value: €106,867.59
+- **Anderson Group 3.0% 2038** (Bond) – Market Value: €98,055.68
+
+### Portfolio PF-00012
+- **Martin, Rose and Obrien Inc.** (Equity) – Market Value: $214,175.59
+- **Anderson Group 3.0% 2038** (Bond) – Market Value: $179,903.54
+- **Walker Ltd Inc.** (Equity) – Market Value: $134,050.37
+
+### Portfolio PF-00013
+- **Martin, Rose and Obrien Inc.** (Equity) – Market Value: €268,222.41
+- **Walker Ltd Inc.** (Equity) – Market Value: €159,676.99
+- **Russell Group Materials FUND** (Fund / Utilities sector) – Market Value: €82,746.13",2026-11-19T08:45:12.862948+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T48,kyc_status,True,judge,,2,2728,49,1,0,572,74.84,74.8,13.72,wealth__get_client,"The KYC status of David Benson is **verified**, and the next KYC review is due on **2027-09-01**.",2026-11-19T08:45:31.674748+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T49,kyc_status,True,judge,,2,2721,49,1,0,566,45.46,45.5,29.06,wealth__get_client,"The KYC status of Heather Smith is **verified**, and the next KYC review is due on **2027-03-01**.",2026-11-19T08:46:07.543950+00:00
+security_only,1,00db6aff-c9b7-4d52-99b4-1926b79a7e7b,T50,unknown_client,True,judge,,2,2183,66,1,1,18,25.69,25.7,18.2,wealth__get_client,"I'm sorry, but I couldn't find any client matching the name ""Zorblax Quintavalle"" in our system. Please check the spelling or provide a client ID or different name.",2026-11-19T08:46:30.039963+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T01,client_total_value,True,number,,3,4806,84,2,0,929,55.59,72.5 38.7,20.66,wealth__get_client wealth__list_portfolios,"The total market value of Karen Smith's portfolios is £457,140.95 (across 1 portfolio: Smith Growth, PF-00014).",2026-11-19T08:46:50.950248+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T02,client_total_value,True,number,,3,5136,140,2,0,1255,41.61,42.7 40.5,18.61,wealth__get_client wealth__list_portfolios,"Sean Myers has two portfolios with a combined total market value of **26,085,665.76** (across EUR and USD):
+
+1. **Myers Balanced (PF-00004)**: EUR 13,333,972.95
+2. **Myers Balanced (PF-00005)**: USD 12,751,692.81",2026-11-19T08:47:09.567884+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T03,client_total_value,True,number,,3,5516,185,2,0,1599,50.79,54.9 46.7,13.84,wealth__get_client wealth__list_portfolios,"Bryan Hale has three portfolios with a combined total market value of **3,825,354.83** (across EUR and USD currencies), broken down as follows:
+
+- **Hale Aggressive Growth (PF-00035, EUR):** 1,274,947.59 EUR
+- **Hale Aggressive Growth (PF-00036, USD):** 1,219,366.01 USD
+- **Hale Aggressive Growth (PF-00037, USD):** 1,331,041.23 USD",2026-11-19T08:47:23.409930+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T04,client_total_value,True,number,,3,4799,71,2,0,926,38.43,41.4 35.4,17.6,wealth__get_client wealth__list_portfolios,"The total market value of Kathy Jenkins's portfolios is $13,755,954.17.",2026-11-19T08:47:41.015298+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T05,client_risk_profile,True,text,,2,2739,30,1,0,583,47.07,47.1,12.1,wealth__get_client,The risk profile recorded for Curtis Brown is **conservative**.,2026-11-19T08:47:53.116474+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T06,client_risk_profile,True,text,,2,2730,30,1,0,583,40.52,40.5,16.83,wealth__get_client,The risk profile recorded for Heather Suarez is **aggressive**.,2026-11-19T08:48:09.950864+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T07,client_risk_profile,True,text,,2,2730,30,1,0,587,46.8,46.8,12.68,wealth__get_client,The risk profile recorded for Chloe Wagner is **moderate**.,2026-11-19T08:48:22.633487+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T08,client_advisor,True,text,,2,2729,40,1,0,575,41.42,41.4,7.84,wealth__get_client,"The advisor in charge of Tracy Ware is Zachary Rice, and he is located in the New York office.",2026-11-19T08:48:30.478986+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T09,client_advisor,True,text,,2,2736,41,1,0,577,41.02,41.0,11.37,wealth__get_client,"The advisor in charge of Cheryl Johnson is Zachary Rice, and he is located in the New York office.",2026-11-19T08:48:41.850835+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T10,client_advisor,True,text,,2,2725,39,1,0,567,53.4,53.4,19.99,wealth__get_client,"The advisor in charge of Tina Morgan is Henry Santiago, and he is located in the Geneva office.",2026-11-19T08:49:01.841009+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T11,portfolio_cash,False,number,,7,58850,228,6,4,10623,84.11,259.9 33.6 28.2 34.3 110.6 38.1,48.54,wealth__get_holdings wealth__list_portfolios wealth__get_client wealth__get_client wealth__get_transactions wealth__list_portfolios,"Portfolio PF-00055 holds **$54,411.39** in cash equivalents (specifically in the *Allen-Allen Treasury Money Market* fund, holding ID `H-001022`, representing 9.13% of the portfolio's total market value).",2026-11-19T08:49:50.394766+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T12,portfolio_cash,False,number,,5,45704,153,4,1,10457,82.04,217.6 43.5 41.6 25.5,33.45,wealth__get_holdings wealth__list_portfolios wealth__get_client wealth__get_client,"Portfolio PF-00005 does not exist in the system (portfolio IDs in the database follow a different numbering scheme, and available portfolios belong to client CL-0001). Therefore, no cash balance is available for portfolio PF-00005.",2026-11-19T08:50:23.854095+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T13,portfolio_cash,False,number,MaxTurnsExceeded: Max turns (12) exceeded,0,0,0,12,1,0,52.0,156.1 45.2 46.5 30.9 42.1 32.5 44.2 41.9 42.8 48.6 39.4 53.9,102.52,wealth__get_holdings wealth__list_portfolios wealth__get_client wealth__list_portfolios wealth__get_client wealth__get_client wealth__get_client wealth__list_portfolios wealth__get_client wealth__list_portfolios wealth__get_client wealth__list_portfolios,,2026-11-19T08:52:06.386977+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T14,largest_holding,True,text,,2,10351,86,1,0,8131,146.61,146.6,8.72,wealth__get_holdings,"The largest position by market value in portfolio PF-00012 is **Gomez-Jenkins Inc.** (ticker: **GOME**) with a market value of **$219,147.23** and a weight of **7.56%**.",2026-11-19T08:52:15.115251+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T15,largest_holding,True,text,,2,7404,87,1,0,5242,110.14,110.1,8.91,wealth__get_holdings,"The largest position in portfolio PF-00029 by market value is **Garcia, Humphrey and Baker Inc.** (ticker: `GARC`), with a market value of **$24,639.58** and a weight of **11.94%**.",2026-11-19T08:52:24.027546+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T16,largest_holding,True,text,,2,10719,98,1,0,8459,220.49,220.5,9.53,wealth__get_holdings,"The largest position in portfolio PF-00032 by market value is **Allen-Allen Treasury Money Market** (ticker: `ALLE`, ISIN: `DENF877VREN7`).
+
+* **Market Value:** $340,027.52
+* **Weight:** 7.11%",2026-11-19T08:52:33.560314+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T17,holding_count,False,number,,2,9127,42,1,0,6904,187.06,187.1,11.62,wealth__get_holdings,Portfolio PF-00065 holds 18 different positions.,2026-11-19T08:52:45.187462+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T18,holding_count,True,number,,2,11130,42,1,0,8845,164.93,164.9,12.2,wealth__get_holdings,Portfolio PF-00004 holds 22 different positions.,2026-11-19T08:52:57.396283+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T19,holding_count,False,number,,2,12246,42,1,0,10092,179.05,179.1,13.05,wealth__get_holdings,Portfolio PF-00074 holds 26 different positions.,2026-11-19T08:53:10.453272+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T20,return_1y,True,number,,2,3291,56,1,0,1184,65.17,65.2,15.71,wealth__get_portfolio_performance,The one-year return of portfolio PF-00026 is 4.56%.,2026-11-19T08:53:26.165104+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T21,return_1y,True,number,,2,3297,56,1,0,1172,45.23,45.2,12.2,wealth__get_portfolio_performance,The one-year return of portfolio PF-00071 is -6.75%.,2026-11-19T08:53:38.367086+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T22,return_1y,True,number,,2,3284,57,1,0,1164,46.26,46.3,25.35,wealth__get_portfolio_performance,The one-year return of portfolio PF-00055 is **9.15%**.,2026-11-19T08:54:03.723000+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T23,excess_return_ytd,True,number,,2,3183,107,1,0,1059,41.89,41.9,14.89,wealth__get_portfolio_performance,"Year to date, portfolio PF-00029 did not beat its benchmark (Bloomberg Global Aggregate). 
+
+- **Portfolio Return:** -0.98%
+- **Benchmark Return:** -0.92%
+- **Excess Return:** -0.06 percentage points (underperformed by 0.06 percentage points).",2026-11-19T08:54:18.620223+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T24,excess_return_ytd,True,number,,2,3198,101,1,0,1072,40.6,40.6,15.27,wealth__get_portfolio_performance,"Yes, year-to-date portfolio PF-00059 beat its benchmark (MSCI ACWI IMI). 
+
+- **Portfolio Return:** 14.91%
+- **Benchmark Return:** 14.02%
+- **Excess Return:** 0.89 percentage points",2026-11-19T08:54:33.896344+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T25,excess_return_ytd,True,number,,2,3200,95,1,0,1075,40.88,40.9,23.27,wealth__get_portfolio_performance,"Yes, year to date, portfolio PF-00037 beat its benchmark (MSCI ACWI IMI) by **6.85** percentage points (portfolio return was **35.73%** versus the benchmark return of **28.89%**).",2026-11-19T08:54:57.169353+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T26,risk_metric,True,number,,2,3265,59,1,0,1149,41.15,41.1,8.42,wealth__get_portfolio_performance,The annualised volatility of portfolio PF-00001 over the last year is 3.97%.,2026-11-19T08:55:05.594144+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T27,risk_metric,True,number,,2,3301,56,1,0,1184,57.12,57.1,9.19,wealth__get_portfolio_performance,The one-year Sharpe ratio of portfolio PF-00022 is 2.3.,2026-11-19T08:55:14.785774+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T28,risk_metric,True,number,,2,3300,60,1,0,1174,61.33,61.3,12.74,wealth__get_portfolio_performance,The annualised volatility of portfolio PF-00057 over the last year is 11.75%.,2026-11-19T08:55:27.530906+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T29,top_contributor,True,text,,2,3291,96,1,0,1176,44.89,44.9,11.18,wealth__get_portfolio_performance,"Over the last year, the holding that contributed the most to portfolio PF-00044's performance was **Ferrell, Jones and Lewis Energy ETF** (ISIN: `CHBKK4CIJ2V4`) with a contribution of **7.491%**.",2026-11-19T08:55:38.712894+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T30,top_contributor,True,text,,3,11248,119,2,0,6858,76.46,44.0 108.9,15.17,wealth__get_portfolio_performance wealth__get_holdings,"The holding that contributed the most to portfolio PF-00036's performance over the last year was **Gray Group Consumer Discretionary FUND** (ISIN: `IECFNFHOLQC6`), with a contribution of `0.556%`.",2026-11-19T08:55:53.886515+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T31,top_contributor,True,text,,2,3312,93,1,0,1187,45.16,45.2,7.36,wealth__get_portfolio_performance,"Over the last year, the holding that contributed the most to portfolio PF-00020's performance was **Martin, Rose and Obrien Inc.** (ISIN: `IEE7UR23GDP1`) with a contribution of **0.358%**.",2026-11-19T08:56:01.249701+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T32,dividend_count,True,number,,2,2311,107,1,0,59,25.46,25.5,7.82,wealth__get_transactions,"Between 2026-01-01 and 2026-10-30, portfolio PF-00028 received 0 dividend payments.",2026-11-19T08:56:09.074471+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T33,dividend_count,True,number,,2,3616,106,1,0,1389,66.61,66.6,7.33,wealth__get_transactions,Portfolio PF-00045 received 4 dividend payments between 2026-01-01 and 2026-10-30.,2026-11-19T08:56:16.403562+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T34,dividend_count,True,number,,2,3596,106,1,0,1367,56.57,56.6,7.67,wealth__get_transactions,Portfolio PF-00014 received 4 dividend payments between 2026-01-01 and 2026-10-30.,2026-11-19T08:56:24.080563+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T35,last_sell,True,text,,2,5572,92,1,0,3346,100.11,100.1,7.68,wealth__get_transactions,"The most recent sale in portfolio PF-00012 was:
+- **Instrument:** Evans, Stewart and Walton Consumer Discretionary FUND (Ticker: EVAN)
+- **Trade Date:** 2026-08-09",2026-11-19T08:56:31.766806+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T36,last_sell,True,text,,2,4881,118,1,0,2673,85.74,85.7,8.32,wealth__get_transactions,"The most recent sale in portfolio PF-00050 was:
+- **Instrument:** Sanchez, Wheeler and Harvey Inc. (Ticker: SANC, ISIN: NLYLURTP0LZ6)
+- **Trade Date:** 2026-06-12 (Settle Date: 2026-06-14)",2026-11-19T08:56:40.093731+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T37,last_sell,True,text,,2,2543,99,1,0,377,33.09,33.1,9.32,wealth__get_transactions,"The most recent sale in portfolio PF-00014 was:
+- **Instrument:** Baxter Inc Inc. (Ticker: BAXT, ISIN: DEGXN0GUO4K1)
+- **Trade Date:** 2026-08-19",2026-11-19T08:56:49.412103+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T38,best_portfolio,True,text,,4,14192,273,5,0,5124,81.75,46.4 104.0 106.2 106.4 45.7,20.7,wealth__get_client wealth__get_portfolio_performance wealth__get_portfolio_performance wealth__get_portfolio_performance wealth__list_portfolios,"Bryan Hale has three portfolios, all named ""Hale Aggressive Growth"". The one with the best one-year return is portfolio **PF-00037** (Account ID ending in `3057`, Corporate tax wrapper), which achieved a **27.74%** one-year return. 
+
+For comparison:
+- **PF-00035**: -2.95%
+- **PF-00036**: 1.18%
+- **PF-00037**: 27.74%",2026-11-19T08:57:10.112873+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T39,best_portfolio,True,text,,3,6779,166,3,0,2933,77.02,51.3 88.0 91.8,13.55,wealth__get_client wealth__get_portfolio_performance wealth__get_portfolio_performance,"Caleb Palmer has two portfolios:
+
+- **PF-00038**: -6.86% one-year return
+- **PF-00039**: +0.27% one-year return
+
+Portfolio **PF-00039** had the best one-year return, with **0.27%**.",2026-11-19T08:57:23.660982+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T40,best_portfolio,True,text,,3,7884,194,4,0,4082,104.74,51.0 119.7 123.5 124.7,14.86,wealth__get_client wealth__get_portfolio_performance wealth__get_portfolio_performance wealth__get_portfolio_performance,"Andrea Harding has three portfolios (`PF-00062`, `PF-00063`, and `PF-00064`). 
+
+Her best-performing portfolio over the last one year was **PF-00063**, with a one-year return of **30.14%**.",2026-11-19T08:57:38.529503+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T41,most_cash,True,text,,4,29096,174,4,0,12260,140.08,72.0 209.6 226.2 52.4,26.02,wealth__get_client wealth__get_holdings wealth__get_holdings wealth__list_portfolios,"Erin Daugherty's portfolio **PF-00026** (Daugherty Capital Preservation) holds the most cash, with a cash balance of **223,237.51 EUR**. Her other portfolio (PF-00027) holds **158,259.45 USD**.",2026-11-19T08:58:04.555253+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T42,most_cash,True,text,,3,22406,187,3,0,18280,235.45,40.8 330.2 335.4,15.88,wealth__get_client wealth__get_holdings wealth__get_holdings,"Sean Myers's portfolio **PF-00004** holds the most cash equivalents, with a total value of **1,111,628.00 EUR** across two holdings:
+- Jones Inc Treasury Money Market: 578,696.19 EUR
+- Suarez LLC Treasury Money Market: 532,931.81 EUR
+
+(By comparison, portfolio PF-00005 holds 815,492.49 USD in cash equivalents.)",2026-11-19T08:58:20.444063+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T43,transfer_simulation,True,number,,2,2412,115,1,0,142,320.1,320.1,7.12,wealth__transfer_funds,"After the simulated transfer of 6,000.00 EUR from portfolio PF-00063 to PF-00064, the remaining cash in PF-00063 would be **49,932.25 EUR**.",2026-11-19T08:58:27.568544+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T44,transfer_simulation,True,number,,2,2425,139,1,0,146,328.6,328.6,7.44,wealth__transfer_funds,"Based on the simulated transfer of 201,000 USD from portfolio PF-00038 to PF-00039, the remaining cash in portfolio PF-00038 would be **1,804,815.25 USD** (down from 2,005,815.25 USD).",2026-11-19T08:58:35.008691+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T45,transfer_simulation,True,number,,2,2414,115,1,0,144,341.09,341.1,8.8,wealth__transfer_funds,"After the simulated transfer of 8,000.00 EUR from portfolio PF-00011 to PF-00013, the remaining cash in PF-00011 would be **73,389.89 EUR**.",2026-11-19T08:58:43.813739+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T46,esg_exclusions,True,judge,,3,19783,261,3,0,15916,251.28,40.2 352.6 361.0,13.41,wealth__get_client wealth__get_holdings wealth__get_holdings,"Yes, Joseph Rodriguez holds assets in the **Utilities** sector, which is the sector he requested to exclude in his preferences. 
+
+Here are the holdings in the excluded sector (Utilities):
+
+1. **Portfolio PF-00056:**
+   * **Anderson Group 3.0% 2038** (Bond) – Market Value: £16,702.95 (Weight: 5.69%)
+   * **Martin, Rose and Obrien Inc.** (Equity) – Market Value: £10,357.52 (Weight: 3.53%)
+
+2. **Portfolio PF-00057:**
+   * **Anderson Group 3.0% 2038** (Bond) – Market Value: $11,260.33 (Weight: 3.79%)",2026-11-19T08:58:58.190713+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T47,esg_exclusions,True,judge,,3,28108,434,4,0,24016,354.39,40.6 397.7 481.0 498.2,14.92,wealth__get_client wealth__get_holdings wealth__get_holdings wealth__get_holdings,"Yes, Chloe Wagner holds several assets in the sector she asked to exclude (**Utilities**):
+
+### Portfolio PF-00011
+- **Campbell-Clark Inc.** (Equity) – Market Value: €181,552.49
+- **Russell Group Materials FUND** (Fund / Utilities sector) – Market Value: €129,965.24
+- **Nolan-Flynn Inc.** (Equity) – Market Value: €106,867.59
+- **Anderson Group 3.0% 2038** (Bond) – Market Value: €98,055.68
+
+### Portfolio PF-00012
+- **Martin, Rose and Obrien Inc.** (Equity) – Market Value: $214,175.59
+- **Anderson Group 3.0% 2038** (Bond) – Market Value: $179,903.54
+- **Walker Ltd Inc.** (Equity) – Market Value: $134,050.37
+
+### Portfolio PF-00013
+- **Martin, Rose and Obrien Inc.** (Equity) – Market Value: €268,222.41
+- **Walker Ltd Inc.** (Equity) – Market Value: €159,676.99
+- **Russell Group Materials FUND** (Fund / Utilities sector) – Market Value: €82,746.13",2026-11-19T08:59:14.859230+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T48,kyc_status,True,judge,,2,2728,49,1,0,572,44.87,44.9,7.49,wealth__get_client,"The KYC status of David Benson is **verified**, and the next KYC review is due on **2027-09-01**.",2026-11-19T08:59:24.057435+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T49,kyc_status,True,judge,,2,2721,49,1,0,566,41.92,41.9,7.28,wealth__get_client,"The KYC status of Heather Smith is **verified**, and the next KYC review is due on **2027-03-01**.",2026-11-19T08:59:32.708209+00:00
+security_only,2,2f8f5d12-7577-4a8f-af73-7760cd37e2bf,T50,unknown_client,True,judge,,2,2183,66,1,1,18,24.64,24.6,9.47,wealth__get_client,"I'm sorry, but I couldn't find any client matching the name ""Zorblax Quintavalle"" in our system. Please check the spelling or provide a client ID or different name.",2026-11-19T08:59:43.377427+00:00
