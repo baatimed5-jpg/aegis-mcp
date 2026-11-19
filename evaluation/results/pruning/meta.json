@@ -1,0 +1,22 @@
+{
+  "selected": "lightgbm",
+  "threshold": 0.002901615753497485,
+  "target_recall": 0.95,
+  "examples": {
+    "train": 952,
+    "val": 743,
+    "test": 474
+  },
+  "positives": {
+    "train": 98,
+    "val": 62,
+    "test": 31
+  },
+  "tasks": {
+    "train": 29,
+    "val": 10,
+    "test": 10
+  },
+  "llm_vs_heuristic_coverage": 0.6574,
+  "labeler": "gemini/gemini-3.1-flash-lite"
+}

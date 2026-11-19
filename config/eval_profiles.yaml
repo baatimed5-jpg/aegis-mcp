@@ -25,7 +25,7 @@ profiles:
   security_only:
     description: Through the gateway with auth, policy/approval, PII masking and the rule injection scan; no optimizer.
     mcp_url: http://127.0.0.1:8000/mcp
-    gateway_config: config/gateway.yaml
+    gateway_config: config/profiles/security_only.yaml   # same pipeline as the first baseline runs (+ metrics, observe-only)
     token_env: AGENT_TOKEN_ASSISTANT
     auto_approve: true                # the runner approves transfer approvals through the admin API
   # ---- Phase 5+ profiles (gateway configs in config/profiles/) ----

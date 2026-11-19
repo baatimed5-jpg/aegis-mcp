@@ -18,10 +18,13 @@ policies_file: policies.yaml   # relative to this file
 approval_timeout_s: 120
 admin_token_env: ADMIN_TOKEN    # REST API key for /api/approvals
 
+cache: {enabled: true, ttl_s: 300}
+
 pipeline:
   # pii_mask runs before policy so approvals and audit rows only ever see masked arguments.
   request: [auth, pii_mask, policy, injection_scan, audit]
-  response: [pii_mask, injection_scan]
+  # optimizer first: same savings, half the scan overhead (REPORT.md, D38)
+  response: [optimizer, pii_mask, injection_scan, metrics]
 
 middlewares:
   pii_mask:
@@ -34,3 +37,10 @@ middlewares:
     on_description: hide    # hide | sanitize | flag | off
     on_argument: block      # block | flag | off
     on_response: sanitize   # sanitize | block | flag | off
+  optimizer:
+    pruning: rules          # off | rules | learned (needs ml/artifacts/pruning_model.joblib)
+    serialization: compact  # json | compact
+    evidence_recovery: true
+    rules_file: pruning_rules.yaml
+  metrics:
+    input_price_per_mtok_usd: 0.30

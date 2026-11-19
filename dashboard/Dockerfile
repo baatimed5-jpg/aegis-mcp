@@ -1,5 +1,5 @@
 # --- build stage -------------------------------------------------------------
-FROM node:24.11.1-alpine AS build
+FROM node:24.17.0-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund

@@ -14,7 +14,7 @@ from __future__ import annotations
 import logging
 from typing import Any, Literal, Protocol
 
-from mcp.types import TextContent
+from mcp.types import TextContent, Tool
 from pydantic import BaseModel, ConfigDict, Field
 
 from gateway.evidence import EvidenceStore
@@ -28,6 +28,19 @@ log = logging.getLogger(__name__)
 
 VIRTUAL_SERVER = "aegis"
 OMITTED_KEY = "_omitted"
+
+
+def relax_schema(schema: Any) -> Any:
+    """Copy of a JSON schema with every ``required`` list removed (pruned results omit fields).
+
+    MCP clients validate ``structuredContent`` against the advertised ``outputSchema``; the gateway
+    must not promise fields the optimizer may remove. Types and descriptions are kept.
+    """
+    if isinstance(schema, dict):
+        return {k: relax_schema(v) for k, v in schema.items() if k != "required"}
+    if isinstance(schema, list):
+        return [relax_schema(v) for v in schema]
+    return schema
 
 
 class OptimizerSettings(BaseModel):
@@ -77,6 +90,15 @@ class OptimizerMiddleware(Middleware):
         self.settings = settings
         self.pruner = pruner
         self.evidence = evidence if settings.evidence_recovery else None
+
+    async def on_list_tools(self, ctx: Any, tools: list[Tool]) -> list[Tool]:
+        """Advertise relaxed output schemas for every downstream tool the optimizer may prune."""
+        if self.pruner is None:
+            return tools
+        return [
+            t.model_copy(update={"output_schema": relax_schema(t.output_schema)}) if t.output_schema else t
+            for t in tools
+        ]
 
     async def on_response(self, ctx: CallContext) -> None:
         """Rewrite a successful structured result."""

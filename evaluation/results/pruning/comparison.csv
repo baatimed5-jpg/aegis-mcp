@@ -1,0 +1,5 @@
+pruner,threshold,val_pr_auc,test_pr_auc,recall_needed,precision_kept,fields_dropped,calls_complete,val_fields_dropped
+learned_logreg,0.2136421847498081,0.4976,0.3898,0.9032,0.1854,0.6814,0.75,0.6124
+learned_lightgbm,0.002901615753497485,0.7477,0.6861,0.9355,0.2417,0.7468,0.8333,0.6756
+rules,,,,0.9032,0.14,0.5781,0.8333,
+none,,,,1.0,0.0654,0.0,1.0,

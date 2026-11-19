@@ -6,9 +6,10 @@ Data: ``ml/data/pruning/labels.jsonl`` (LLM labels, one row per reference call).
 of each call is one example (label = field needed). Split BY TASK (seed 42): 30 tasks train,
 10 validation, 10 test, so test questions are never seen in training.
 Models: logistic regression vs LightGBM on the same features (gateway/optimizer/features.py).
-Threshold: recall-first, the highest threshold that keeps >= 95 % of needed fields on validation
+Threshold: recall-first, the highest threshold that keeps >= 95 % of needed fields on validation;
+the kept model is the one that drops the most fields on validation at that recall
 (dropping a needed field can cost a wrong answer; keeping a useless one only costs tokens).
-Output: ml/artifacts/pruning_model.joblib (best model by validation PR-AUC) and
+Output: ml/artifacts/pruning_model.joblib (selected model) and
 evaluation/results/pruning/{comparison.csv, meta.json}.
 """
 
@@ -73,9 +74,9 @@ def matrix(
 
 
 def recall_first_threshold(y: np.ndarray, p: np.ndarray, target: float = TARGET_RECALL) -> float:
-    """Highest threshold whose recall of needed fields stays >= target."""
+    """Highest threshold whose recall of needed fields stays >= target (candidates = observed scores)."""
     best = 0.0
-    for t in np.round(np.arange(0.01, 0.99, 0.01), 2):
+    for t in np.unique(p):
         kept = p >= t
         recall = (kept & (y == 1)).sum() / max(1, (y == 1).sum())
         if recall >= target:
@@ -147,14 +148,16 @@ def main() -> None:
         results.append({"pruner": f"learned_{name}", "threshold": threshold, "val_pr_auc": round(ap_val, 4),
                         "test_pr_auc": round(float(average_precision_score(yt, pt)), 4),
                         **{k: round(v, 4) for k, v in m.items()}})  # fmt: skip
-        fitted[name] = (model, threshold, ap_val)
+        drop_val = float((pv < threshold).mean())  # selection: fields dropped on val at the target recall
+        results[-1]["val_fields_dropped"] = round(drop_val, 4)
+        fitted[name] = (model, threshold, drop_val)
     rm = field_metrics(yt, rule_keep(parts["test"], idt), idt)
-    results.append({"pruner": "rules", "threshold": "", "val_pr_auc": "", "test_pr_auc": "",
+    results.append({"pruner": "rules", "threshold": "", "val_pr_auc": "", "test_pr_auc": "", "val_fields_dropped": "",
                     **{k: round(v, 4) for k, v in rm.items()}})  # fmt: skip
     keep_all = field_metrics(yt, np.ones_like(yt, dtype=bool), idt)
-    results.append({"pruner": "none", "threshold": "", "val_pr_auc": "", "test_pr_auc": "",
+    results.append({"pruner": "none", "threshold": "", "val_pr_auc": "", "test_pr_auc": "", "val_fields_dropped": "",
                     **{k: round(v, 4) for k, v in keep_all.items()}})  # fmt: skip
-    best = max(fitted, key=lambda k: fitted[k][2])
+    best = max(fitted, key=lambda k: fitted[k][2])  # most fields dropped on val while recall >= target
     model, threshold, _ = fitted[best]
     MODEL_OUT.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump({"model": model, "threshold": threshold, "vocab": vocab, "tools": sorted({r["tool"] for r in rows}),

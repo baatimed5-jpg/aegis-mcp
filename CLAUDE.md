@@ -21,7 +21,7 @@ matplotlib · Angular · pytest, ruff, mypy (strict on gateway/), pre-commit · 
 ## Folders
 config/ (gateway.yaml, policies, pruning rules, eval profiles) · servers/wealth, servers/malicious ·
 gateway/ (pipeline/, middlewares/, detectors/, db/, api/) · ml/ (injection/, pruning/) ·
-agents/ (assistant, redteam) · evaluation/ · dashboard/ · tests/ (unit/, integration/) · docs/
+aegis_agents/ (assistant, redteam; D26) · evaluation/ · dashboard/ · tests/ (unit/, integration/) · docs/
 
 ## Ports
 gateway 8000 · wealth 8001 · malicious 8002 · dashboard 4200 · postgres 5432 (local .env: 5433, D17) · redis 6379

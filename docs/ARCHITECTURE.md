@@ -272,7 +272,7 @@ aegis-mcp/
 │   ├── pruning/              # label.py, features.py, train.py, evaluate.py
 │   ├── data/                 # gitignored (downloaded / generated)
 │   └── artifacts/            # small models committed; >50 MB gitignored + download script
-├── agents/
+├── aegis_agents/            # (D26: not "agents", the Agents SDK owns that import name)
 │   ├── assistant/            # wealth-advisor agent
 │   └── redteam/              # attack variant generator
 ├── evaluation/

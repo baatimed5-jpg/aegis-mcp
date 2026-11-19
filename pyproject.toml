@@ -99,5 +99,5 @@ explicit = true
 "evaluation/attacks.py" = ["E501"]
 
 [[tool.mypy.overrides]]
-module = ["joblib", "joblib.*", "lightgbm", "lightgbm.*", "sklearn", "sklearn.*", "sentence_transformers", "datasets", "transformers", "torch", "matplotlib", "matplotlib.*"]
+module = ["jsonschema", "jsonschema.*", "joblib", "joblib.*", "lightgbm", "lightgbm.*", "sklearn", "sklearn.*", "sentence_transformers", "datasets", "transformers", "torch", "matplotlib", "matplotlib.*"]
 ignore_missing_imports = true

@@ -22,6 +22,7 @@ from gateway.middlewares.optimizer import (
     OptimizerMiddleware,
     OptimizerSettings,
     RulePruner,
+    relax_schema,
 )
 from gateway.optimizer.rules import PruningRules, load_rules, prune
 from gateway.optimizer.serialize import render, tabulate
@@ -181,3 +182,28 @@ async def test_gateway_fetch_omitted_cache_and_audit_tokens() -> None:
     assert all(r["tokens_after"] < r["tokens_before"] for r in holdings)
     transfers = [r for r in rows if r["tool"] == "transfer_funds"]
     assert [r["cache_hit"] for r in transfers] == [False, False]  # not read-only: never cached
+
+
+def test_relax_schema_drops_required_everywhere() -> None:
+    schema = {
+        "type": "object",
+        "required": ["a"],
+        "properties": {"a": {"type": "array", "items": {"type": "object", "required": ["x"]}}},
+        "$defs": {"D": {"required": ["y"], "properties": {"y": {"type": "string"}}}},
+    }
+    relaxed = relax_schema(schema)
+    assert "required" not in json.dumps(relaxed)
+    assert relaxed["properties"]["a"]["items"]["type"] == "object"
+
+
+async def test_pruned_results_validate_against_advertised_schema() -> None:
+    """An MCP client validates structuredContent against outputSchema: pruned results must pass."""
+    import jsonschema
+
+    store = MemoryStore()
+    async with optimized_gateway(store) as gw:
+        tools = {t.name: t for t in await gw.list_tools("assistant")}
+        res = await gw.call_tool("assistant", "wealth__get_holdings", {"portfolio_id": "PF-00001"})
+    schema = tools["wealth__get_holdings"].output_schema
+    assert schema is not None
+    jsonschema.validate(res.structured_content, schema)

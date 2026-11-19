@@ -15,3 +15,6 @@ evaluation/results/**/*.log
 ml/*.log
 ml/artifacts/injection-deberta/
 evaluation/results/smoke/
+docker_build.log
+docker_build_dash.log
+evaluation/results/*.log
