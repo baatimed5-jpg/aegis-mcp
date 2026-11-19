@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import re
 import sys
 from pathlib import Path
 
@@ -14,6 +15,23 @@ from gateway.app import Gateway, create_http_app, run_stdio
 from gateway.config import DEFAULT_CONFIG_PATH, load_config
 
 ROOT = Path(__file__).resolve().parents[1]
+_TOKEN = re.compile(r"(token=)[^&\s\"']+")
+
+
+class RedactTokens(logging.Filter):
+    """Mask ``token=...`` query values (dashboard WebSocket key) in server logs."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        record.msg = _TOKEN.sub("token=***", str(record.msg))
+        if record.args:
+            record.args = tuple(_TOKEN.sub("token=***", a) if isinstance(a, str) else a for a in record.args)
+        return True
+
+
+def redact_server_logs() -> None:
+    """Attach the redaction filter to uvicorn's loggers (access lines carry the request path)."""
+    for name in ("uvicorn.access", "uvicorn.error", "uvicorn"):
+        logging.getLogger(name).addFilter(RedactTokens())
 
 
 def main() -> None:
@@ -35,7 +53,14 @@ def main() -> None:
     if args.stdio:
         anyio.run(run_stdio, gateway, args.agent or config.default_agent)
     else:
-        uvicorn.run(create_http_app(gateway, host=args.host), host=args.host, port=args.port)
+        redact_server_logs()
+        log_config = uvicorn.config.LOGGING_CONFIG
+        log_config["filters"] = {"redact": {"()": "gateway.__main__.RedactTokens"}}
+        for handler in log_config["handlers"].values():
+            handler["filters"] = ["redact"]
+        uvicorn.run(
+            create_http_app(gateway, host=args.host), host=args.host, port=args.port, log_config=log_config
+        )
 
 
 if __name__ == "__main__":

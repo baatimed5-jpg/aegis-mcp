@@ -38,7 +38,7 @@ def test_repo_config_loads() -> None:
     config = load_config(REPO_CONFIG)
     assert config.servers["wealth"].transport == "streamable_http"
     assert config.pipeline.request == ["auth", "pii_mask", "policy", "injection_scan", "audit"]
-    assert config.pipeline.response == ["pii_mask", "injection_scan"]
+    assert config.pipeline.response == ["optimizer", "pii_mask", "injection_scan", "metrics"]
     assert "wealth" in config.enabled_servers
     assert "malicious" not in config.enabled_servers  # test-only server stays off by default
     assert config.policies_file is not None

@@ -20,13 +20,13 @@ written and committed (abb1eee + later commits). Remaining work is mostly *runni
   `gemini/gemini-3.1-flash-lite` (separate quota). Key in `.env` (created in AI Studio, project "Default Gemini Project").
 - Live evals: `bash scripts/run_live_evals.sh 08:55` (waits for the quota reset, resumes, writes REPORT.md).
 - Offline: `python -m evaluation.replay` · `python -m ml.injection.evaluate` · `python -m evaluation.attacks` ·
-  `python -m evaluation.final_report`. Tests: 187 unit + 16 integration pass.
+  `python -m evaluation.final_report`. Tests: 205 pass (unit + integration).
 
 ## Remaining
-1. DeBERTa training (`ml/train_deberta.log`) -> `ml.injection.evaluate` -> `evaluation.attacks` -> replay all 6
-   profiles -> `evaluation.final_report` -> commit.
-2. `docker compose up --build` smoke test (gateway healthz, dashboard login, live WS).
-3. Live runs over several days (quota): baseline security_only, then rule/learned/full.
+Only live LLM runs (free quota 500 req/day): `bash scripts/run_live_evals.sh 08:55` (resumes; stop the
+compose app containers first, they use ports 8000/8001: `docker compose stop gateway wealth dashboard`).
+Then `python -m evaluation.report --tag baseline` / `--tag optimizers` and commit.
+Done: detector (MiniLM, D39), attacks, replay, report, docker compose verified (WS via nginx, D40 split).
 
 ## Known issues
 - Free quota limits live runs (D30); learned-pruning replay includes its training tasks (clean comparison = held-out table).

@@ -276,8 +276,8 @@ def test_registry_builds_repo_pipeline(monkeypatch: pytest.MonkeyPatch) -> None:
     services = Services(config, store=MemoryStore())
     pipeline = build_pipeline(config, services)
     assert [m.name for m in pipeline.request] == ["auth", "pii_mask", "policy", "injection_scan", "audit"]
-    assert [m.name for m in pipeline.response] == ["pii_mask", "injection_scan"]
-    assert pipeline.request[1] is pipeline.response[0]
+    assert [m.name for m in pipeline.response] == ["optimizer", "pii_mask", "injection_scan", "metrics"]
+    assert pipeline.request[1] is pipeline.response[1]  # one shared pii_mask instance
     auth = cast(AuthMiddleware, pipeline.request[0])
     assert auth.identify("k1") == "assistant"
     policy = cast(PolicyMiddleware, pipeline.request[2])
