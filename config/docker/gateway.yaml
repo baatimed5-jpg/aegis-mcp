@@ -1,6 +1,6 @@
 # Demo gateway for `docker compose up`: full security pipeline + rule optimizer + Redis cache.
 # Uses the rule injection detector so the image needs no ML libraries (switch `detector` to
-# deberta/combined after installing the ml group and training, see README).
+# transformer/combined after installing the ml group and training, see README).
 servers:
   wealth: {transport: streamable_http, url: http://wealth:8001/mcp}
   malicious: {transport: streamable_http, url: http://malicious:8002/mcp, enabled: false}

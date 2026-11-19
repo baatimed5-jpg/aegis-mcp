@@ -44,8 +44,11 @@ class InjectionScanSettings(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    detector: Literal["rules", "deberta", "llm", "combined"] = "rules"
-    model_path: str = "ml/artifacts/injection-deberta"
+    detector: Literal["rules", "transformer", "llm", "combined"] = "rules"
+    """Detector for tool results and arguments."""
+    description_detector: Literal["rules", "same"] = "rules"
+    """Tool descriptions/schemas: ``rules`` (default, D40) or ``same`` as ``detector``."""
+    model_path: str = "ml/artifacts/injection-transformer"
     """DeBERTa folder (relative to the repository root)."""
     combined_file: str = "ml/artifacts/injection-combined.json"
     llm_model: str = "gemini/gemini-3.1-flash-lite"
@@ -82,9 +85,15 @@ class InjectionScanMiddleware(Middleware):
     name = "injection_scan"
 
     def __init__(
-        self, detector: InjectionDetector, settings: InjectionScanSettings, store: GatewayStore | None = None
+        self,
+        detector: InjectionDetector,
+        settings: InjectionScanSettings,
+        store: GatewayStore | None = None,
+        description_detector: InjectionDetector | None = None,
     ) -> None:
         self.detector = detector
+        self.description_detector = description_detector or detector
+        """Detector for tool descriptions/schemas (D40: rules by default, ML models misfire on API docs)."""
         self.settings = settings
         self.store = store
         self._descriptions: dict[tuple[str, str], Detection] = {}
@@ -101,7 +110,9 @@ class InjectionScanMiddleware(Middleware):
         cached = self._descriptions.get(key)
         if cached is not None:
             return cached
-        results = await anyio.to_thread.run_sync(self.detector.score_many, [t for t in texts if t])
+        results = await anyio.to_thread.run_sync(
+            self.description_detector.score_many, [t for t in texts if t]
+        )
         found = max(results, key=lambda d: d.score, default=Detection(0.0))
         self._descriptions[key] = found
         if self._flagged(found):
@@ -126,12 +137,16 @@ class InjectionScanMiddleware(Middleware):
         """Replace every flagged text of the tool definition with the placeholder."""
 
         def clean(path: Path, value: str) -> str:
-            if path and path[-1] in _SCHEMA_TEXT_KEYS and self._flagged(self.detector.score(value)):
+            if (
+                path
+                and path[-1] in _SCHEMA_TEXT_KEYS
+                and self._flagged(self.description_detector.score(value))
+            ):
                 return PLACEHOLDER
             return value
 
         description = tool.description
-        if description and self._flagged(self.detector.score(description)):
+        if description and self._flagged(self.description_detector.score(description)):
             description = PLACEHOLDER
         return tool.model_copy(
             update={"description": description, "input_schema": map_strings(tool.input_schema, clean)}

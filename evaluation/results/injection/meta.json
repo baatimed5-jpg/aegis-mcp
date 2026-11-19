@@ -1,0 +1,11 @@
+{
+  "llm": "gemini/gemini-3.1-flash-lite, 9 batched requests",
+  "thresholds": {
+    "rules": 0.5,
+    "transformer": 0.5,
+    "combined": 0.2,
+    "llm": 0.5
+  },
+  "val_n": 204,
+  "test_n": 221
+}

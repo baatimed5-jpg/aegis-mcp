@@ -1,0 +1,11 @@
+profile,metric,mean,std,runs
+no_security,attack_block_rate,0.0,0,1
+no_security,false_positive_rate,0.0,0,1
+security_rules,attack_block_rate,0.25,0,1
+security_rules,false_positive_rate,0.0,0,1
+security_transformer,attack_block_rate,0.9917,0,1
+security_transformer,false_positive_rate,0.0078,0,1
+security_combined,attack_block_rate,0.9917,0,1
+security_combined,false_positive_rate,0.0078,0,1
+full_combined,attack_block_rate,0.9917,0,1
+full_combined,false_positive_rate,0.0078,0,1

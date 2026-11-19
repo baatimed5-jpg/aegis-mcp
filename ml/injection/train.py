@@ -4,7 +4,7 @@
 
 Plain PyTorch loop (no Trainer) so every step is visible: AdamW, linear warm-up/decay, mixed
 precision on CUDA, best epoch chosen by validation F1, decision threshold tuned on validation.
-Saves the model + tokenizer + ``aegis_meta.json`` to ``ml/artifacts/injection-deberta`` (gitignored:
+Saves the model + tokenizer + ``aegis_meta.json`` to ``ml/artifacts/injection-transformer`` (gitignored:
 too large for git; re-create it with this script). The Colab notebook runs the same code.
 """
 
@@ -26,7 +26,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer, get_
 from ml.injection.data import load_split
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "ml" / "artifacts" / "injection-deberta"
+OUT = ROOT / "ml" / "artifacts" / "injection-transformer"
 SEED = 42
 MAX_LEN = 256
 
@@ -70,7 +70,11 @@ def main() -> None:
     parser.add_argument("--epochs", type=int, default=3)
     parser.add_argument("--batch", type=int, default=16)
     parser.add_argument("--lr", type=float, default=3e-5)
+    parser.add_argument(
+        "--max-len", type=int, default=MAX_LEN, help="token limit (128 = half the memory/time)"
+    )
     args = parser.parse_args()
+    globals()["MAX_LEN"] = args.max_len
     set_seed(SEED)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     train, val = load_split("train"), load_split("val")
@@ -102,7 +106,7 @@ def main() -> None:
     for epoch in range(args.epochs):
         model.train()
         total = 0.0
-        for batch in loader:
+        for step, batch in enumerate(loader, start=1):
             batch = {k: v.to(device) for k, v in batch.items()}
             with torch.autocast(device_type="cuda", enabled=device == "cuda"):
                 loss = model(**batch).loss
@@ -113,7 +117,10 @@ def main() -> None:
             scaler.step(opt)
             scaler.update()
             sched.step()
-            total += float(loss)
+            total += float(loss.detach())
+            if step % 20 == 0:
+                print(f"  epoch {epoch + 1} step {step}/{len(loader)} loss {total / step:.4f} "
+                      f"({time.time() - t0:.0f}s)", flush=True)  # fmt: skip
         p_val = predict(model, tokenizer, [r["text"] for r in val], device)
         f1 = f1_score(y_val, p_val >= 0.5, zero_division=0)
         history.append({"epoch": epoch + 1, "train_loss": total / len(loader), "val_f1@0.5": f1})

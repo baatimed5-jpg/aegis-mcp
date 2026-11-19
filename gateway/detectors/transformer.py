@@ -26,7 +26,7 @@ def calibrate(p: float, threshold: float) -> float:
 class TransformerDetector:
     """Sequence classifier loaded from a local folder."""
 
-    name = "deberta"
+    name = "transformer"
 
     def __init__(self, path: Path | str, device: str | None = None, batch_size: int = 32) -> None:
         import torch

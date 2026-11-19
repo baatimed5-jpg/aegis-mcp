@@ -13,7 +13,7 @@ ml/data/
 # evaluation server/run logs
 evaluation/results/**/*.log
 ml/*.log
-ml/artifacts/injection-deberta/
+ml/artifacts/injection-transformer/
 evaluation/results/smoke/
 docker_build.log
 docker_build_dash.log

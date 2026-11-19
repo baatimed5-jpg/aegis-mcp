@@ -1,0 +1,13 @@
+profile,metric,mean,std,runs
+learned_logreg,recall_needed,0.9032,0,1
+learned_logreg,fields_dropped,0.6814,0,1
+learned_logreg,calls_complete,0.75,0,1
+learned_lightgbm,recall_needed,0.9355,0,1
+learned_lightgbm,fields_dropped,0.7468,0,1
+learned_lightgbm,calls_complete,0.8333,0,1
+rules,recall_needed,0.9032,0,1
+rules,fields_dropped,0.5781,0,1
+rules,calls_complete,0.8333,0,1
+none,recall_needed,1.0,0,1
+none,fields_dropped,0.0,0,1
+none,calls_complete,1.0,0,1

@@ -72,27 +72,27 @@ def main() -> None:
     tv, tt = [r["text"] for r in val], [r["text"] for r in test]
 
     rules = RuleDetector()
-    deberta = TransformerDetector(ARTIFACTS / "injection-deberta")
+    transformer = TransformerDetector(ARTIFACTS / "injection-transformer")
     scores: dict[str, dict[str, np.ndarray]] = {}
     latency: dict[str, float] = {}
     thresholds: dict[str, float] = {}
-    for name, det in (("rules", rules), ("deberta", deberta)):
+    for name, det in (("rules", rules), ("transformer", transformer)):
         sv, _ = timed(det.score_many, tv)
-        deberta.score_many(tt[:8])  # warm-up so CUDA init is not in the timing
+        transformer.score_many(tt[:8])  # warm-up so CUDA init is not in the timing
         st, lat = timed(det.score_many, tt)
         scores[name] = {"val": sv, "test": st}
         latency[name] = lat
         thresholds[name] = 0.5  # both detectors are calibrated so 0.5 is their operating point
 
     # combined: logistic regression on validation scores of rules + DeBERTa
-    xv = np.column_stack([scores["rules"]["val"], scores["deberta"]["val"]])
-    xt = np.column_stack([scores["rules"]["test"], scores["deberta"]["test"]])
+    xv = np.column_stack([scores["rules"]["val"], scores["transformer"]["val"]])
+    xt = np.column_stack([scores["rules"]["test"], scores["transformer"]["test"]])
     lr = LogisticRegression(random_state=42).fit(xv, y_val)
     pv, pt = lr.predict_proba(xv)[:, 1], lr.predict_proba(xt)[:, 1]
     thresholds["combined"] = tune(y_val, pv)
     scores["combined"] = {"val": pv, "test": pt}
-    latency["combined"] = latency["rules"] + latency["deberta"]
-    combined_cfg = {"detectors": ["rules", "deberta"], "weights": lr.coef_[0].tolist(),
+    latency["combined"] = latency["rules"] + latency["transformer"]
+    combined_cfg = {"detectors": ["rules", "transformer"], "weights": lr.coef_[0].tolist(),
                     "bias": float(lr.intercept_[0]), "threshold": thresholds["combined"]}  # fmt: skip
     (ARTIFACTS / "injection-combined.json").write_text(json.dumps(combined_cfg, indent=2), encoding="utf-8")
 
@@ -111,7 +111,7 @@ def main() -> None:
             llm_note = f"failed: {type(exc).__name__}: {str(exc)[:160]}"
     OUT.mkdir(parents=True, exist_ok=True)
     rows = []
-    for name in ("rules", "deberta", "llm", "combined"):
+    for name in ("rules", "transformer", "llm", "combined"):
         if name not in scores:
             continue
         m = metrics(y_test, scores[name]["test"], thresholds[name])

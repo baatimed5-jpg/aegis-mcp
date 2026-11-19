@@ -51,7 +51,8 @@ def split_synthetic(samples: list[Sample]) -> dict[str, list[Sample]]:
     rng = random.Random(SEED)
     out: dict[str, list[Sample]] = {"train": [], "val": [], "test": []}
     for label in (0, 1):
-        groups = sorted({s.group for s in samples if s.label == label})
+        groups = sorted({s.group for s in samples if s.label == label and s.source != "wealth_data"})
+        groups += sorted({s.group for s in samples if s.label == label and s.source == "wealth_data"})
         rng.shuffle(groups)
         n = len(groups)
         cut = {g: "train" for g in groups[: int(n * 0.7)]}
@@ -87,7 +88,10 @@ def build() -> dict[str, list[Sample]]:
 def leakage(splits: dict[str, list[Sample]]) -> dict[str, int]:
     """Count normalized texts shared between splits (must be 0) and synthetic groups shared."""
     keys = {n: {normalize(s.text) for s in items} for n, items in splits.items()}
-    groups = {n: {s.group for s in items if s.source == "synthetic"} for n, items in splits.items()}
+    groups = {
+        n: {s.group for s in items if s.source in ("synthetic", "tool_description")}
+        for n, items in splits.items()
+    }
     return {
         "text_train_val": len(keys["train"] & keys["val"]),
         "text_train_test": len(keys["train"] & keys["test"]),

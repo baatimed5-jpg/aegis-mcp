@@ -95,20 +95,22 @@ def build_detector(settings: InjectionScanSettings) -> InjectionDetector:
         return LLMDetector(settings.llm_model)
     from gateway.detectors.transformer import TransformerDetector
 
-    deberta = TransformerDetector(ROOT / settings.model_path)
-    if settings.detector == "deberta":
-        return deberta
+    transformer = TransformerDetector(ROOT / settings.model_path)
+    if settings.detector == "transformer":
+        return transformer
     from gateway.detectors.combined import CombinedDetector
 
     return CombinedDetector.from_file(
-        ROOT / settings.combined_file, {"rules": RuleDetector(), "deberta": deberta}
+        ROOT / settings.combined_file, {"rules": RuleDetector(), "transformer": transformer}
     )
 
 
 def _injection(config: GatewayConfig, services: Services) -> Middleware:
     settings = InjectionScanSettings.model_validate(config.middlewares.get("injection_scan", {}))
     store = services.store if services.has_store else None
-    return InjectionScanMiddleware(build_detector(settings), settings, store)
+    detector = build_detector(settings)
+    description_detector = detector if settings.description_detector == "same" else RuleDetector()
+    return InjectionScanMiddleware(detector, settings, store, description_detector)
 
 
 def _resolve(config: GatewayConfig, name: str) -> Path:

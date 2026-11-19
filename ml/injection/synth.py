@@ -84,6 +84,55 @@ BENIGN = [
     "This message is for internal use only; do not forward outside the advisory team.",
 ]
 
+# Benign MCP tool descriptions: short imperative sentences that must NOT look like injections
+# (verb x object x qualifier templates; split by verb group like the other templates).
+DESC_VERBS = [
+    "Get",
+    "Return",
+    "List",
+    "Fetch",
+    "Search",
+    "Create",
+    "Update",
+    "Delete",
+    "Compute",
+    "Look up",
+    "Read",
+    "Send",
+    "Convert",
+    "Summarize",
+    "Validate",
+    "Export",
+]
+DESC_OBJECTS = [
+    "a client by id or name",
+    "the holdings of a portfolio",
+    "recent transactions",
+    "a stored document",
+    "the exchange rate between two currencies",
+    "an invoice",
+    "the calendar events of a user",
+    "a file",
+    "weather data for a city",
+    "the price of a stock ticker",
+    "an email draft",
+    "the order status",
+    "a support ticket",
+    "the user's profile",
+    "a report as CSV",
+    "the list of open issues",
+]
+DESC_TAILS = [
+    ".",
+    " (read-only).",
+    ". Returns JSON.",
+    " by its identifier.",
+    ", newest first.",
+    ". Requires a valid id.",
+    " for the given date range.",
+    ". Use limit to page results.",
+]
+
 OBFUSCATIONS = ["plain", "plain", "plain", "upper", "zero_width", "tag"]
 
 
@@ -135,4 +184,8 @@ def generate(n_per_class: int = 600) -> list[Sample]:
         samples.append(Sample(_fill(rng, BENIGN[t]), 0, "synthetic", f"ben{t}"))
     for i, text in enumerate(real[: n_per_class - n_templates]):
         samples.append(Sample(text, 0, "wealth_data", f"real{i % 20}"))
+    for vi, verb in enumerate(DESC_VERBS):
+        for obj in DESC_OBJECTS:
+            tail = rng.choice(DESC_TAILS)
+            samples.append(Sample(f"{verb} {obj}{tail}", 0, "tool_description", f"desc{vi}"))
     return samples

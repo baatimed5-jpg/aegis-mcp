@@ -1,7 +1,7 @@
 """Combined detector: logistic regression over the scores of several detectors.
 
 Weights are fitted on the validation split (``ml/injection/evaluate.py``) and saved as JSON:
-``{"detectors": ["rules", "deberta"], "weights": [...], "bias": b, "threshold": t}``. The output is
+``{"detectors": ["rules", "transformer"], "weights": [...], "bias": b, "threshold": t}``. The output is
 calibrated like the transformer detector (the fitted threshold maps to 0.5).
 """
 

@@ -1,0 +1,13 @@
+detector,source,n,precision,recall,f1,fpr,roc_auc
+rules,deepset,116,1.0,0.0333,0.0645,0.0,0.5333
+rules,synthetic,60,1.0,0.5278,0.6909,0.0,0.8056
+rules,wealth_data,45,0.0,0.0,0.0,0.0,nan
+transformer,deepset,116,1.0,0.9,0.9474,0.0,0.9804
+transformer,synthetic,60,1.0,0.9722,0.9859,0.0,1.0
+transformer,wealth_data,45,0.0,0.0,0.0,0.0,nan
+combined,deepset,116,1.0,0.9,0.9474,0.0,0.9804
+combined,synthetic,60,1.0,0.9722,0.9859,0.0,1.0
+combined,wealth_data,45,0.0,0.0,0.0,0.0,nan
+llm,deepset,116,1.0,0.7833,0.8785,0.0,0.9985
+llm,synthetic,60,1.0,1.0,1.0,0.0,1.0
+llm,wealth_data,45,0.0,0.0,0.0,0.0,nan

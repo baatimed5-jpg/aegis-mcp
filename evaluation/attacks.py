@@ -5,10 +5,13 @@
 Every red-team attack (``evaluation/attacks/attacks.jsonl``, both rounds) and every benign text is
 returned by a test tool (``malicious__read_document``, in-process MCP server) and goes through the
 gateway's real response pipeline, as an indirect injection would. A text counts as blocked when the
-gateway records a security event for that call (sanitized or blocked). Benign texts: finance texts
+gateway records a security event for that call (sanitized or blocked). The test tool's own description
+is scanned too: if a detector wrongly flags it, the tool is hidden (``test_tool_hidden``) and the call
+fails before the text is scanned; ``content_detector_flags_wealth_descriptions`` counts how many of the 6 real
+tool descriptions the content detector WOULD flag (why descriptions use the rule detector, D40). Benign texts: finance texts
 with "risky" words (servers/malicious/payloads.py + ml/injection/synth.py) and 100 real free-text
 strings of the wealth dataset. Configurations: no security (rule optimizer only), security with
-each detector (rules, deberta, combined), and the full gateway.
+each detector (rules, transformer, combined), and the full gateway.
 
     attack_block_rate   = blocked attacks / attacks
     false_positive_rate = blocked benign texts / benign texts
@@ -36,6 +39,7 @@ from gateway.store import MemoryStore
 from ml.injection.synth import BENIGN
 from servers.malicious.payloads import BENIGN_TEXTS
 from servers.wealth.data import generate_dataset
+from servers.wealth.server import build_server as build_wealth
 
 ROOT = Path(__file__).resolve().parents[1]
 ATTACKS = ROOT / "evaluation" / "attacks" / "attacks.jsonl"
@@ -66,7 +70,7 @@ CONFIGS: dict[str, tuple[str, str | None]] = {
     # name: (gateway yaml, detector override)
     "no_security": ("config/profiles/rule_optimizer.yaml", None),
     "security_rules": ("config/profiles/security_only.yaml", "rules"),
-    "security_deberta": ("config/profiles/security_only.yaml", "deberta"),
+    "security_transformer": ("config/profiles/security_only.yaml", "transformer"),
     "security_combined": ("config/profiles/security_only.yaml", "combined"),
     "full_combined": ("config/profiles/full.yaml", "combined"),
 }
@@ -83,8 +87,25 @@ def _config(path: str, detector: str | None) -> GatewayConfig:
     return config
 
 
-async def run_config(name: str, texts: list[str]) -> list[bool]:
-    """For each text: did the gateway raise a security event on the call that returned it?"""
+async def wealth_descriptions_flagged(config: GatewayConfig) -> int:
+    """How many of the 6 real wealth tool descriptions the configured detector flags (false positives)."""
+    from mcp import Client
+
+    from gateway.middlewares.injection import InjectionScanSettings
+    from gateway.middlewares.registry import build_detector
+
+    if "injection_scan" not in config.pipeline.request + config.pipeline.response:
+        return 0
+    settings = InjectionScanSettings.model_validate(config.middlewares.get("injection_scan", {}))
+    detector = build_detector(settings)  # the content detector, to report its behaviour on API docs
+    async with Client(build_wealth()) as client:
+        tools = (await client.list_tools()).tools
+    threshold = float(config.middlewares.get("injection_scan", {}).get("threshold", 0.5))
+    return sum(detector.score(t.description or "").score >= threshold for t in tools)
+
+
+async def run_config(name: str, texts: list[str]) -> tuple[list[bool], bool, int]:
+    """Per text: security event raised on its call? Plus: test tool hidden? wealth descriptions flagged."""
     path, detector = CONFIGS[name]
     config = _config(path, detector)
     store = MemoryStore()
@@ -94,12 +115,13 @@ async def run_config(name: str, texts: list[str]) -> list[bool]:
     async with Gateway(
         config, targets={"malicious": document_server(texts)}, pipeline=pipeline, services=services
     ) as gw:
+        hidden = "malicious__read_document" not in {t.name for t in await gw.list_tools("assistant")}
         for i in range(len(texts)):
             before = len(store.events)
             await gw.call_tool("assistant", "malicious__read_document", {"i": i})
             new = store.events[before:]
             flagged.append(any(e["kind"] in ("response", "argument") for e in new))
-    return flagged
+    return flagged, hidden, await wealth_descriptions_flagged(config)
 
 
 async def main_async() -> None:
@@ -112,7 +134,7 @@ async def main_async() -> None:
     texts = [a["text"] for a in attacks] + benign
     results, per_text = [], []
     for name in CONFIGS:
-        flagged = await run_config(name, texts)
+        flagged, hidden, desc_fp = await run_config(name, texts)
         att, ben = flagged[: len(attacks)], flagged[len(attacks) :]
         r1 = [f for a, f in zip(attacks, att, strict=True) if a["round"] == 1]
         r2 = [f for a, f in zip(attacks, att, strict=True) if a["round"] == 2]
@@ -122,6 +144,7 @@ async def main_async() -> None:
             "block_rate_round1": round(sum(r1) / len(r1), 4) if r1 else "",
             "block_rate_adaptive": round(sum(r2) / len(r2), 4) if r2 else "", "adaptive_n": len(r2),
             "false_positive_rate": round(sum(ben) / len(ben), 4), "benign": len(ben),
+            "test_tool_hidden": hidden, "content_detector_flags_wealth_descriptions": f"{desc_fp}/6",
         })  # fmt: skip
         for a, f in zip(attacks, att, strict=True):
             per_text.append({"config": name, "kind": "attack", "id": a["id"], "round": a["round"],

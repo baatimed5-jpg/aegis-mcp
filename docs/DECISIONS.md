@@ -214,7 +214,7 @@ Format: **Decision**, then *Alternatives*, then *Reason*. Numbering follows ARCH
   on CPU (12 cores); the same script uses CUDA when available. The Docker image needs CPU torch anyway.
 
 ## D34: Detector selection and calibration
-- `injection_scan.detector`: rules | deberta | llm | combined. DeBERTa and the combined detector are
+- `injection_scan.detector`: rules | transformer | llm | combined (D39). The transformer and the combined detector are
   calibrated so that the threshold chosen on validation maps to 0.5, so `threshold: 0.5` always means
   "the model's validated operating point". Combined = logistic regression over rules + DeBERTa scores,
   fitted on validation only. The LLM detector is batched (25 texts/request) and evaluated offline; it is
@@ -241,3 +241,24 @@ Format: **Decision**, then *Alternatives*, then *Reason*. Numbering follows ARCH
 - The replay showed the same savings with half the overhead when the optimizer runs before the PII and
   injection scans (they scan less text). The demo image stays small (no ML libraries); the ML detector and
   learned pruning are enabled by switching two config values after installing the `ml` group.
+
+## D39: Transformer detector = fine-tuned MiniLM-L6 on this machine (DeBERTa script kept)
+- **Decision**: the planned DeBERTa-v3-small fine-tuning did not finish one epoch in 90 minutes on this
+  laptop's CPU (no usable GPU wheel, D33; memory pressure stopped the first attempt). The same training
+  script (`ml/injection/train.py`, unchanged data, splits, seed and validation-tuned threshold) fine-tunes
+  `sentence-transformers/all-MiniLM-L6-v2` (6 layers, fast tokenizer) instead. The detector is now called
+  `transformer`; the base model is recorded in `ml/artifacts/injection-transformer/aegis_meta.json`.
+- *Alternatives*: wait for DeBERTa (hours, risk of more memory kills); a pre-trained public injection model
+  (not our training, ~700 MB download at ~300 KB/s).
+- *Reason*: a fine-tuned transformer trained on our data tonight. `--model microsoft/deberta-v3-small`
+  reproduces the original plan on a GPU (e.g. the Colab notebook).
+
+## D40: Tool descriptions are scanned with the rule detector; tool results/arguments with the ML detector
+- **Finding**: the fine-tuned transformer (F1 0.96 on held-out texts) flags 5 of the 6 real wealth tool
+  descriptions (raw score ~0.99): API docs mention "transfer", "HIGH RISK", argument instructions, the
+  vocabulary it only saw inside attacks. Measured in `evaluation/attacks.py` (column
+  `content_detector_flags_wealth_descriptions`), even after adding benign templated descriptions to training.
+- **Decision**: `injection_scan.description_detector: rules` (default) for descriptions/schemas, which are
+  static and come from configured servers; the configured ML detector scans tool results and arguments,
+  where indirect injections arrive. `same` restores one detector everywhere.
+- *Reason*: hiding legitimate tools would break the agent; this is a domain-shift limitation to report.

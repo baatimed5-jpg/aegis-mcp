@@ -1,0 +1,5 @@
+detector,threshold,precision,recall,f1,fpr,roc_auc,latency_ms_per_text,n_test
+rules,0.5,1.0,0.2188,0.359,0.0,0.6354,0.058,221
+transformer,0.5,1.0,0.9271,0.9622,0.0,0.9928,7.616,221
+llm,0.5,1.0,0.8646,0.9274,0.0,0.9994,467.699,221
+combined,0.2,1.0,0.9271,0.9622,0.0,0.9928,7.674,221
