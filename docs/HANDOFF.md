@@ -1,5 +1,7 @@
 # Handoff
 
+**Location:** `Desktop/AI Projects/3-aegis-mcp` (moved 2026-11-19; fresh `.venv`, compose project name pinned).
+
 **State (2026-11-19 night):** user asked to run ALL remaining phases without stopping. Code for phases 4-10 is
 written and committed (abb1eee + later commits). Remaining work is mostly *running* things (see below).
 
@@ -23,7 +25,8 @@ written and committed (abb1eee + later commits). Remaining work is mostly *runni
   `python -m evaluation.final_report`. Tests: 205 pass (unit + integration).
 
 ## Remaining
-Only live LLM runs (free quota 500 req/day): `bash scripts/run_live_evals.sh 08:55` (resumes; stop the
+Live results so far: baseline no_gateway 138/150, security_only 135/150; rule_optimizer 47/50.
+Left: learned_optimizer + full. Only live LLM runs (free quota 500 req/day): `bash scripts/run_live_evals.sh 08:55` (resumes; stop the
 compose app containers first, they use ports 8000/8001: `docker compose stop gateway wealth dashboard`).
 Then `python -m evaluation.report --tag baseline` / `--tag optimizers` and commit.
 Done: detector (MiniLM, D39), attacks, replay, report, docker compose verified (WS via nginx, D40 split).
