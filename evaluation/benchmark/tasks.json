@@ -1,0 +1,769 @@
+[
+  {
+    "id": "T01",
+    "category": "client_total_value",
+    "question": "What is the total market value of all of Karen Smith's portfolios? (They are all in GBP.)",
+    "check": {
+      "type": "number",
+      "value": 457140.95,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_client",
+      "list_portfolios"
+    ]
+  },
+  {
+    "id": "T02",
+    "category": "client_total_value",
+    "question": "What is the total market value of all of Sean Myers's portfolios?",
+    "check": {
+      "type": "number",
+      "value": 26085665.76,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_client",
+      "list_portfolios"
+    ]
+  },
+  {
+    "id": "T03",
+    "category": "client_total_value",
+    "question": "What is the total market value of all of Bryan Hale's portfolios?",
+    "check": {
+      "type": "number",
+      "value": 3825354.83,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_client",
+      "list_portfolios"
+    ]
+  },
+  {
+    "id": "T04",
+    "category": "client_total_value",
+    "question": "What is the total market value of all of Kathy Jenkins's portfolios? (They are all in USD.)",
+    "check": {
+      "type": "number",
+      "value": 13755954.17,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_client",
+      "list_portfolios"
+    ]
+  },
+  {
+    "id": "T05",
+    "category": "client_risk_profile",
+    "question": "Which risk profile is recorded for our client Curtis Brown?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "conservative"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_client"
+    ]
+  },
+  {
+    "id": "T06",
+    "category": "client_risk_profile",
+    "question": "Which risk profile is recorded for our client Heather Suarez?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "aggressive"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_client"
+    ]
+  },
+  {
+    "id": "T07",
+    "category": "client_risk_profile",
+    "question": "Which risk profile is recorded for our client Chloe Wagner?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "moderate"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_client"
+    ]
+  },
+  {
+    "id": "T08",
+    "category": "client_advisor",
+    "question": "Who is the advisor in charge of Tracy Ware, and which office are they in?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "Zachary Rice"
+        ],
+        [
+          "New York"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_client"
+    ]
+  },
+  {
+    "id": "T09",
+    "category": "client_advisor",
+    "question": "Who is the advisor in charge of Cheryl Johnson, and which office are they in?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "Zachary Rice"
+        ],
+        [
+          "New York"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_client"
+    ]
+  },
+  {
+    "id": "T10",
+    "category": "client_advisor",
+    "question": "Who is the advisor in charge of Tina Morgan, and which office are they in?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "Henry Santiago"
+        ],
+        [
+          "Geneva"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_client"
+    ]
+  },
+  {
+    "id": "T11",
+    "category": "portfolio_cash",
+    "question": "How much cash is available in portfolio PF-00055?",
+    "check": {
+      "type": "number",
+      "value": 23753.97,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_holdings",
+      "list_portfolios"
+    ]
+  },
+  {
+    "id": "T12",
+    "category": "portfolio_cash",
+    "question": "How much cash is available in portfolio PF-00005?",
+    "check": {
+      "type": "number",
+      "value": 814278.37,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_holdings",
+      "list_portfolios"
+    ]
+  },
+  {
+    "id": "T13",
+    "category": "portfolio_cash",
+    "question": "How much cash is available in portfolio PF-00004?",
+    "check": {
+      "type": "number",
+      "value": 925750.88,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_holdings",
+      "list_portfolios"
+    ]
+  },
+  {
+    "id": "T14",
+    "category": "largest_holding",
+    "question": "What is the largest position (by market value) in portfolio PF-00012, and its weight?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "Gomez-Jenkins Inc.",
+          "GOME"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_holdings"
+    ]
+  },
+  {
+    "id": "T15",
+    "category": "largest_holding",
+    "question": "What is the largest position (by market value) in portfolio PF-00029, and its weight?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "Garcia, Humphrey and Baker Inc.",
+          "GARC"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_holdings"
+    ]
+  },
+  {
+    "id": "T16",
+    "category": "largest_holding",
+    "question": "What is the largest position (by market value) in portfolio PF-00032, and its weight?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "Allen-Allen Treasury Money Market",
+          "ALLE"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_holdings"
+    ]
+  },
+  {
+    "id": "T17",
+    "category": "holding_count",
+    "question": "How many different positions does portfolio PF-00065 hold?",
+    "check": {
+      "type": "number",
+      "value": 17,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_holdings"
+    ]
+  },
+  {
+    "id": "T18",
+    "category": "holding_count",
+    "question": "How many different positions does portfolio PF-00004 hold?",
+    "check": {
+      "type": "number",
+      "value": 22,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_holdings"
+    ]
+  },
+  {
+    "id": "T19",
+    "category": "holding_count",
+    "question": "How many different positions does portfolio PF-00074 hold?",
+    "check": {
+      "type": "number",
+      "value": 25,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_holdings"
+    ]
+  },
+  {
+    "id": "T20",
+    "category": "return_1y",
+    "question": "What was the one-year return of portfolio PF-00026, in percent?",
+    "check": {
+      "type": "number",
+      "value": 4.56,
+      "abs_tol": 0.051
+    },
+    "expected_tools": [
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T21",
+    "category": "return_1y",
+    "question": "What was the one-year return of portfolio PF-00071, in percent?",
+    "check": {
+      "type": "number",
+      "value": -6.75,
+      "abs_tol": 0.051
+    },
+    "expected_tools": [
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T22",
+    "category": "return_1y",
+    "question": "What was the one-year return of portfolio PF-00055, in percent?",
+    "check": {
+      "type": "number",
+      "value": 9.15,
+      "abs_tol": 0.051
+    },
+    "expected_tools": [
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T23",
+    "category": "excess_return_ytd",
+    "question": "Year to date, did portfolio PF-00029 beat its benchmark? By how many percentage points?",
+    "check": {
+      "type": "number",
+      "value": -0.06,
+      "abs_tol": 0.051,
+      "signless": true
+    },
+    "expected_tools": [
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T24",
+    "category": "excess_return_ytd",
+    "question": "Year to date, did portfolio PF-00059 beat its benchmark? By how many percentage points?",
+    "check": {
+      "type": "number",
+      "value": 0.89,
+      "abs_tol": 0.051,
+      "signless": true
+    },
+    "expected_tools": [
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T25",
+    "category": "excess_return_ytd",
+    "question": "Year to date, did portfolio PF-00037 beat its benchmark? By how many percentage points?",
+    "check": {
+      "type": "number",
+      "value": 6.85,
+      "abs_tol": 0.051,
+      "signless": true
+    },
+    "expected_tools": [
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T26",
+    "category": "risk_metric",
+    "question": "What is the annualised volatility of portfolio PF-00001 over the last year?",
+    "check": {
+      "type": "number",
+      "value": 3.97,
+      "abs_tol": 0.051
+    },
+    "expected_tools": [
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T27",
+    "category": "risk_metric",
+    "question": "What is the one-year Sharpe ratio of portfolio PF-00022?",
+    "check": {
+      "type": "number",
+      "value": 2.3,
+      "abs_tol": 0.051
+    },
+    "expected_tools": [
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T28",
+    "category": "risk_metric",
+    "question": "What is the annualised volatility of portfolio PF-00057 over the last year?",
+    "check": {
+      "type": "number",
+      "value": 11.75,
+      "abs_tol": 0.051
+    },
+    "expected_tools": [
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T29",
+    "category": "top_contributor",
+    "question": "Which holding contributed the most to portfolio PF-00044's performance over the last year?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "Ferrell, Jones and Lewis Energy ETF",
+          "CHBKK4CIJ2V4"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T30",
+    "category": "top_contributor",
+    "question": "Which holding contributed the most to portfolio PF-00036's performance over the last year?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "Gray Group Consumer Discretionary FUND",
+          "IECFNFHOLQC6"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T31",
+    "category": "top_contributor",
+    "question": "Which holding contributed the most to portfolio PF-00020's performance over the last year?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "Martin, Rose and Obrien Inc.",
+          "IEE7UR23GDP1"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T32",
+    "category": "dividend_count",
+    "question": "How many dividend payments did portfolio PF-00028 receive between 2026-01-01 and 2026-10-30?",
+    "check": {
+      "type": "number",
+      "value": 0,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_transactions"
+    ]
+  },
+  {
+    "id": "T33",
+    "category": "dividend_count",
+    "question": "How many dividend payments did portfolio PF-00045 receive between 2026-01-01 and 2026-10-30?",
+    "check": {
+      "type": "number",
+      "value": 4,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_transactions"
+    ]
+  },
+  {
+    "id": "T34",
+    "category": "dividend_count",
+    "question": "How many dividend payments did portfolio PF-00014 receive between 2026-01-01 and 2026-10-30?",
+    "check": {
+      "type": "number",
+      "value": 4,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "get_transactions"
+    ]
+  },
+  {
+    "id": "T35",
+    "category": "last_sell",
+    "question": "What was the most recent sale in portfolio PF-00012: which instrument, and on what date?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "Evans, Stewart and Walton Consumer Discretionary FUND",
+          "EVAN"
+        ],
+        [
+          "2026-08-09",
+          "August 9, 2026",
+          "9 August 2026",
+          "Aug 9, 2026",
+          "9 Aug 2026",
+          "09/08/2026",
+          "08/09/2026"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_transactions"
+    ]
+  },
+  {
+    "id": "T36",
+    "category": "last_sell",
+    "question": "What was the most recent sale in portfolio PF-00050: which instrument, and on what date?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "Sanchez, Wheeler and Harvey Inc.",
+          "SANC"
+        ],
+        [
+          "2026-06-12",
+          "June 12, 2026",
+          "12 June 2026",
+          "Jun 12, 2026",
+          "12 Jun 2026",
+          "12/06/2026",
+          "06/12/2026"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_transactions"
+    ]
+  },
+  {
+    "id": "T37",
+    "category": "last_sell",
+    "question": "What was the most recent sale in portfolio PF-00014: which instrument, and on what date?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "Baxter Inc Inc.",
+          "BAXT"
+        ],
+        [
+          "2026-08-19",
+          "August 19, 2026",
+          "19 August 2026",
+          "Aug 19, 2026",
+          "19 Aug 2026",
+          "19/08/2026",
+          "08/19/2026"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_transactions"
+    ]
+  },
+  {
+    "id": "T38",
+    "category": "best_portfolio",
+    "question": "Bryan Hale has several portfolios. Which one had the best one-year return, and how much?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "PF-00037"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_client",
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T39",
+    "category": "best_portfolio",
+    "question": "Caleb Palmer has several portfolios. Which one had the best one-year return, and how much?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "PF-00039"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_client",
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T40",
+    "category": "best_portfolio",
+    "question": "Andrea Harding has several portfolios. Which one had the best one-year return, and how much?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "PF-00063"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_client",
+      "get_portfolio_performance"
+    ]
+  },
+  {
+    "id": "T41",
+    "category": "most_cash",
+    "question": "Which of Erin Daugherty's portfolios holds the most cash, and how much?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "PF-00026"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_client",
+      "list_portfolios"
+    ]
+  },
+  {
+    "id": "T42",
+    "category": "most_cash",
+    "question": "Which of Sean Myers's portfolios holds the most cash, and how much?",
+    "check": {
+      "type": "text",
+      "all_of": [
+        [
+          "PF-00004"
+        ]
+      ]
+    },
+    "expected_tools": [
+      "get_client",
+      "list_portfolios"
+    ]
+  },
+  {
+    "id": "T43",
+    "category": "transfer_simulation",
+    "question": "Please simulate a transfer of 6,000 EUR from portfolio PF-00063 to PF-00064 with reference 'benchmark'. How much cash would remain in PF-00063?",
+    "check": {
+      "type": "number",
+      "value": 49932.25,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "transfer_funds"
+    ]
+  },
+  {
+    "id": "T44",
+    "category": "transfer_simulation",
+    "question": "Please simulate a transfer of 201,000 USD from portfolio PF-00038 to PF-00039 with reference 'benchmark'. How much cash would remain in PF-00038?",
+    "check": {
+      "type": "number",
+      "value": 1804815.25,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "transfer_funds"
+    ]
+  },
+  {
+    "id": "T45",
+    "category": "transfer_simulation",
+    "question": "Please simulate a transfer of 8,000 EUR from portfolio PF-00011 to PF-00013 with reference 'benchmark'. How much cash would remain in PF-00011?",
+    "check": {
+      "type": "number",
+      "value": 73389.89,
+      "rel_tol": 0.005
+    },
+    "expected_tools": [
+      "transfer_funds"
+    ]
+  },
+  {
+    "id": "T46",
+    "category": "esg_exclusions",
+    "question": "Does Joseph Rodriguez hold anything in the sectors they asked to exclude? List those holdings.",
+    "check": {
+      "type": "judge",
+      "reference": "Excluded sectors: Utilities. Holdings in those sectors: Anderson Group 3.0% 2038, Martin, Rose and Obrien Inc.."
+    },
+    "expected_tools": [
+      "get_client",
+      "get_holdings"
+    ]
+  },
+  {
+    "id": "T47",
+    "category": "esg_exclusions",
+    "question": "Does Chloe Wagner hold anything in the sectors they asked to exclude? List those holdings.",
+    "check": {
+      "type": "judge",
+      "reference": "Excluded sectors: Utilities. Holdings in those sectors: Anderson Group 3.0% 2038, Campbell-Clark Inc., Martin, Rose and Obrien Inc., Nolan-Flynn Inc., Russell Group Materials FUND, Walker Ltd Inc.."
+    },
+    "expected_tools": [
+      "get_client",
+      "get_holdings"
+    ]
+  },
+  {
+    "id": "T48",
+    "category": "kyc_status",
+    "question": "What is the KYC status of David Benson and when is the next KYC review due?",
+    "check": {
+      "type": "judge",
+      "reference": "KYC status: verified. Next review: 2027-09-01."
+    },
+    "expected_tools": [
+      "get_client"
+    ]
+  },
+  {
+    "id": "T49",
+    "category": "kyc_status",
+    "question": "What is the KYC status of Heather Smith and when is the next KYC review due?",
+    "check": {
+      "type": "judge",
+      "reference": "KYC status: verified. Next review: 2027-03-01."
+    },
+    "expected_tools": [
+      "get_client"
+    ]
+  },
+  {
+    "id": "T50",
+    "category": "unknown_client",
+    "question": "What is the total portfolio value of our client Zorblax Quintavalle?",
+    "check": {
+      "type": "judge",
+      "reference": "There is no client named Zorblax Quintavalle; the assistant must say it cannot find this client and must not invent a value."
+    },
+    "expected_tools": [
+      "get_client"
+    ]
+  }
+]

@@ -1,0 +1,15 @@
+# Evaluation profile "learned_optimizer" (learned pruning + compact format + evidence recovery; no security). Generated layout; see config/eval_profiles.yaml.
+servers:
+  wealth: {transport: streamable_http, url: http://127.0.0.1:8001/mcp}
+agents:
+  assistant: {token_env: AGENT_TOKEN_ASSISTANT}
+  redteam: {token_env: AGENT_TOKEN_REDTEAM}
+policies_file: ../policies.yaml
+approval_timeout_s: 120
+admin_token_env: ADMIN_TOKEN
+pipeline:
+  request: [audit]
+  response: [optimizer, metrics]
+middlewares:
+  optimizer: {pruning: learned, serialization: compact, evidence_recovery: true, rules_file: ../pruning_rules.yaml}
+  metrics: {input_price_per_mtok_usd: 0.30}

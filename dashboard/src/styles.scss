@@ -1,0 +1,317 @@
+/* AegisMCP dashboard: global tokens and shared primitives (plain SCSS, no UI kit). */
+
+:root {
+  color-scheme: light;
+  --bg: #f4f6fa;
+  --panel: #ffffff;
+  --border: #e3e7ef;
+  --hover: #eef1f6;
+  --text: #141a26;
+  --text-2: #3d475a;
+  --muted: #7a8599;
+  --accent: #4f46e5;
+  --accent-soft: #ecebfd;
+  --ok: #16a34a;
+  --bad: #dc2626;
+  --info: #2563eb;
+  --warn: #ea8a0c;
+  --shadow: 0 1px 2px rgb(16 24 40 / 6%), 0 1px 3px rgb(16 24 40 / 4%);
+  --radius: 12px;
+  --mono: ui-monospace, 'SFMono-Regular', 'Cascadia Code', Consolas, monospace;
+}
+
+@mixin dark {
+  color-scheme: dark;
+  --bg: #0d1117;
+  --panel: #151b24;
+  --border: #253041;
+  --hover: #1d2532;
+  --text: #e6ebf3;
+  --text-2: #b4bfd0;
+  --muted: #7d8899;
+  --accent: #8b85ff;
+  --accent-soft: #23234a;
+  --ok: #3fb96a;
+  --bad: #f05252;
+  --info: #5b9cf6;
+  --warn: #f5a524;
+  --shadow: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    @include dark;
+  }
+}
+:root[data-theme='dark'] {
+  @include dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  font-size: 22px;
+  margin: 0 0 4px;
+  letter-spacing: -0.2px;
+}
+h2 {
+  font-size: 15px;
+  margin: 0 0 12px;
+}
+
+.mono,
+code,
+pre {
+  font-family: var(--mono);
+}
+.muted {
+  color: var(--muted);
+}
+.small {
+  font-size: 12px;
+}
+.nowrap {
+  white-space: nowrap;
+}
+
+.page-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  p {
+    margin: 0;
+    color: var(--muted);
+  }
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* Buttons */
+.btn {
+  appearance: none;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s, background 0.15s;
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  &:not(:disabled):hover {
+    filter: brightness(1.08);
+  }
+  &.primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  &.success {
+    background: var(--ok);
+    color: #fff;
+  }
+  &.danger {
+    background: transparent;
+    color: var(--bad);
+    border-color: color-mix(in srgb, var(--bad) 45%, transparent);
+  }
+  &.ghost {
+    background: var(--panel);
+    color: var(--text-2);
+    border-color: var(--border);
+    &:not(:disabled):hover {
+      background: var(--hover);
+      filter: none;
+    }
+  }
+  &.small {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}
+
+input[type='text'],
+input[type='password'] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-family: var(--mono);
+  &:focus {
+    outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    border-color: var(--accent);
+  }
+}
+
+/* Alerts */
+.alert {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+  &.bad {
+    background: color-mix(in srgb, var(--bad) 10%, var(--panel));
+    color: var(--bad);
+    border-color: color-mix(in srgb, var(--bad) 30%, transparent);
+  }
+  &.ok {
+    background: color-mix(in srgb, var(--ok) 10%, var(--panel));
+    color: var(--ok);
+    border-color: color-mix(in srgb, var(--ok) 30%, transparent);
+  }
+  &.warn {
+    background: color-mix(in srgb, var(--warn) 12%, var(--panel));
+    color: var(--warn);
+    border-color: color-mix(in srgb, var(--warn) 30%, transparent);
+  }
+  &.inline {
+    margin: 0;
+  }
+}
+
+/* Status badges */
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+  --c: var(--muted);
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 14%, transparent);
+  &.ok {
+    --c: var(--ok);
+  }
+  &.bad {
+    --c: var(--bad);
+  }
+  &.info {
+    --c: var(--info);
+  }
+  &.warn {
+    --c: var(--warn);
+  }
+}
+
+/* Chips */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--hover);
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  font-family: inherit;
+  &.mono {
+    font-family: var(--mono);
+  }
+  &.tiny {
+    padding: 0 7px;
+    font-size: 11px;
+    margin-left: 4px;
+  }
+  &.ok {
+    color: var(--ok);
+    background: color-mix(in srgb, var(--ok) 10%, transparent);
+    border-color: color-mix(in srgb, var(--ok) 30%, transparent);
+  }
+  &.warn {
+    color: var(--warn);
+    background: color-mix(in srgb, var(--warn) 12%, transparent);
+    border-color: color-mix(in srgb, var(--warn) 30%, transparent);
+  }
+  &.accent,
+  &.active {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+}
+
+/* Tables */
+.table-card {
+  overflow: hidden;
+  min-width: 0;
+}
+.table-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 18px 12px;
+  flex-wrap: wrap;
+  h2 {
+    margin: 0;
+  }
+}
+.table-scroll {
+  overflow: auto;
+  max-height: 640px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  th {
+    position: sticky;
+    top: 0;
+    background: var(--panel);
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    font-weight: 600;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    z-index: 1;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tbody tr:hover td {
+    background: var(--hover);
+  }
+  .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 32px;
+  }
+}

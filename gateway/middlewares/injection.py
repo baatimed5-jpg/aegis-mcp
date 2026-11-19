@@ -44,7 +44,11 @@ class InjectionScanSettings(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    detector: Literal["rules"] = "rules"
+    detector: Literal["rules", "deberta", "llm", "combined"] = "rules"
+    model_path: str = "ml/artifacts/injection-deberta"
+    """DeBERTa folder (relative to the repository root)."""
+    combined_file: str = "ml/artifacts/injection-combined.json"
+    llm_model: str = "gemini/gemini-3.1-flash-lite"
     threshold: float = Field(default=0.5, ge=0.0, le=1.0)
     on_description: Literal["hide", "sanitize", "flag", "off"] = "hide"
     on_argument: Literal["block", "flag", "off"] = "block"

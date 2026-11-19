@@ -1,0 +1,16 @@
+# Evaluation profile "security_only" (auth, policy/approval, PII, rule injection scan; no optimizer). Generated layout; see config/eval_profiles.yaml.
+servers:
+  wealth: {transport: streamable_http, url: http://127.0.0.1:8001/mcp}
+agents:
+  assistant: {token_env: AGENT_TOKEN_ASSISTANT}
+  redteam: {token_env: AGENT_TOKEN_REDTEAM}
+policies_file: ../policies.yaml
+approval_timeout_s: 120
+admin_token_env: ADMIN_TOKEN
+pipeline:
+  request: [auth, pii_mask, policy, injection_scan, audit]
+  response: [pii_mask, injection_scan, metrics]
+middlewares:
+  pii_mask: {entities: [IBAN_CODE, EMAIL_ADDRESS, PHONE_NUMBER, CREDIT_CARD, US_SSN], min_score: 0.5, model: en_core_web_sm}
+  injection_scan: {detector: rules, threshold: 0.5, on_description: hide, on_argument: block, on_response: sanitize}
+  metrics: {input_price_per_mtok_usd: 0.30}

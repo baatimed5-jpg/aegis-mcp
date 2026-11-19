@@ -1,0 +1,83 @@
+# Rule-based pruning (Phase 5): per downstream tool, fields to DROP before the result reaches the agent.
+# "list[].field" = that field in every list item. Dropped data stays retrievable for 15 min through
+# the virtual tool aegis__fetch_omitted (evidence recovery), so a rule that is too aggressive costs
+# one extra tool call, not a wrong answer.
+# Kept on purpose: names, ids, values, weights, returns, risk metrics, statuses, dates the advisor asks for.
+tools:
+  get_client:
+    - first_name
+    - last_name
+    - birth_date
+    - email            # masked by the PII step anyway
+    - phone
+    - iban
+    - tax_id
+    - address
+    - employer
+    - marital_status
+    - dependents
+    - notes
+    - created_at
+    - updated_at
+    - kyc.documents
+    - kyc.last_review
+    - kyc.source_of_wealth
+    - preferences.contact_channel
+    - preferences.statement_frequency
+    - preferences.language
+    - advisor.advisor_id
+    - advisor.email
+    - advisor.phone
+    - advisor.license_no
+    - advisor.title
+    - advisor.years_experience
+    - advisor.languages
+  list_portfolios:
+    - portfolios[].client_id
+    - portfolios[].account_number
+    - portfolios[].strategy
+    - portfolios[].inception_date
+    - portfolios[].target_allocation
+    - portfolios[].fees
+    - portfolios[].custodian
+    - portfolios[].last_rebalanced
+    - portfolios[].tax_wrapper
+    - portfolios[].created_at
+    - portfolios[].updated_at
+  get_holdings:
+    - holdings[].holding_id
+    - holdings[].portfolio_id
+    - holdings[].instrument     # duplicates isin/ticker/name/sector/country
+    - holdings[].currency
+    - holdings[].quantity
+    - holdings[].avg_cost
+    - holdings[].price
+    - holdings[].price_date
+    - holdings[].cost_basis
+    - holdings[].day_change_pct
+    - holdings[].annual_income
+    - holdings[].beta
+    - holdings[].volatility_pct
+    - holdings[].acquired_on
+    - holdings[].lot_count
+    - holdings[].custodian_ref
+    - holdings[].last_updated
+  get_transactions:
+    - transactions[].portfolio_id
+    - transactions[].settle_date
+    - transactions[].isin
+    - transactions[].quantity
+    - transactions[].price
+    - transactions[].fees
+    - transactions[].taxes
+    - transactions[].currency
+    - transactions[].fx_rate
+    - transactions[].counterparty
+    - transactions[].broker
+    - transactions[].order_id
+    - transactions[].settlement
+    - transactions[].audit
+    - transactions[].comment
+  get_portfolio_performance:
+    - monthly
+    - as_of

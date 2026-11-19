@@ -1,4 +1,13 @@
-# Infrastructure for AegisMCP. Phase 1: Postgres + Redis only (app services come later).
+# AegisMCP: `docker compose up --build` starts everything (Postgres, Redis, migrations, wealth MCP
+# server, gateway on :8000, dashboard on :4200). The malicious test server only starts with
+# `--profile attack`. Secrets (agent/admin keys, Gemini key) come from .env.
+x-python: &python
+  build: .
+  env_file: .env
+  environment:
+    DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-aegis}:${POSTGRES_PASSWORD:-aegis_dev_password}@postgres:5432/${POSTGRES_DB:-aegis}
+    REDIS_URL: redis://redis:6379/0
+
 services:
   postgres:
     image: postgres:16
@@ -22,6 +31,46 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
+  migrate:
+    <<: *python
+    command: ["alembic", "upgrade", "head"]
+    depends_on:
+      postgres: {condition: service_healthy}
+    restart: "no"
+
+  wealth:
+    <<: *python
+    command: ["python", "-m", "servers.wealth", "--host", "0.0.0.0", "--port", "8001"]
+    ports: ["8001:8001"]
+
+  malicious:
+    <<: *python
+    profiles: [attack]
+    command: ["python", "-m", "servers.malicious", "--host", "0.0.0.0", "--port", "8002"]
+    ports: ["8002:8002"]
+
+  gateway:
+    <<: *python
+    command: ["python", "-m", "gateway", "--config", "config/docker/gateway.yaml", "--host", "0.0.0.0", "--port", "8000"]
+    ports: ["8000:8000"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+      wealth: {condition: service_started}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz')"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - ./evaluation/results:/app/evaluation/results:ro   # experiment charts for the dashboard
+
+  dashboard:
+    build: ./dashboard
+    ports: ["4200:80"]
+    depends_on:
+      gateway: {condition: service_healthy}
 
 volumes:
   pgdata:

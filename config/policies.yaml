@@ -2,7 +2,7 @@
 # require_approval wins over allow; tools not listed, and agents not listed, are denied.
 agents:
   assistant:
-    allow: ["wealth__*", "malicious__*"]
+    allow: ["wealth__*", "malicious__*", "aegis__*"]   # aegis__* = gateway virtual tools (evidence recovery)
     require_approval: [wealth__transfer_funds]
   redteam:
     allow: ["wealth__get_*", "wealth__list_*", "malicious__*"]

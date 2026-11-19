@@ -9,3 +9,9 @@ __pycache__/
 coverage.xml
 htmlcov/
 ml/data/
+
+# evaluation server/run logs
+evaluation/results/**/*.log
+ml/*.log
+ml/artifacts/injection-deberta/
+evaluation/results/smoke/

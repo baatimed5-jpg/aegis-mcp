@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from gateway.hub import AuditHub
 from gateway.pipeline.base import Middleware
 from gateway.pipeline.context import CallContext
 from gateway.store import GatewayStore
@@ -51,8 +52,9 @@ class AuditMiddleware(Middleware):
 
     name = "audit"
 
-    def __init__(self, store: GatewayStore) -> None:
+    def __init__(self, store: GatewayStore, hub: AuditHub | None = None) -> None:
         self.store = store
+        self.hub = hub
 
     async def on_request(self, ctx: CallContext) -> None:
         """Record the call as in progress (fails closed if the store is unreachable)."""
@@ -60,4 +62,7 @@ class AuditMiddleware(Middleware):
 
     async def on_complete(self, ctx: CallContext) -> None:
         """Record the final status, reason, latencies and security events."""
-        await self.store.upsert_audit(audit_row(ctx), call_events(ctx))
+        row = audit_row(ctx)
+        await self.store.upsert_audit(row, call_events(ctx))
+        if self.hub is not None:
+            self.hub.publish(row)

@@ -1,0 +1,59 @@
+# Evaluation profiles (spec §8). Each profile = how the assistant reaches the wealth tools.
+# Phase 4 = baseline (no optimization): "no_gateway" and "security_only".
+# Later phases add rule_optimizer, learned_optimizer, full and the order experiment.
+
+model: gemini/gemini-3.5-flash-lite      # LiteLLM model id of the assistant (override: --model)
+judge_model: gemini/gemini-3.5-flash-lite # LLM judge for free-form tasks only
+api_key_env: GEMINI_API_KEY
+runs: 3                               # each profile is run 3 times; report mean and std
+max_turns: 12
+min_request_interval_s: 4.5           # throttle between LLM requests (free tier: stay under ~15 requests/min)
+
+# USD per 1M tokens, Gemini API paid tier list prices (also in LiteLLM's price table).
+pricing:
+  gemini/gemini-3.5-flash: {input: 1.50, output: 9.00}
+  gemini/gemini-3.8-flash: {input: 0.75, output: 3.75}
+  gemini/gemini-3.5-flash-lite: {input: 0.30, output: 2.50}
+
+wealth_port: 8001
+gateway_port: 8000
+
+profiles:
+  no_gateway:
+    description: Assistant talks to the wealth MCP server directly.
+    mcp_url: http://127.0.0.1:8001/mcp
+  security_only:
+    description: Through the gateway with auth, policy/approval, PII masking and the rule injection scan; no optimizer.
+    mcp_url: http://127.0.0.1:8000/mcp
+    gateway_config: config/gateway.yaml
+    token_env: AGENT_TOKEN_ASSISTANT
+    auto_approve: true                # the runner approves transfer approvals through the admin API
+  # ---- Phase 5+ profiles (gateway configs in config/profiles/) ----
+  rule_optimizer:
+    description: Gateway with only the rule optimizer (pruning + compact format + evidence recovery) and audit.
+    mcp_url: http://127.0.0.1:8000/mcp
+    gateway_config: config/profiles/rule_optimizer.yaml
+    token_env: AGENT_TOKEN_ASSISTANT
+  learned_optimizer:
+    description: Gateway with only the learned optimizer and audit.
+    mcp_url: http://127.0.0.1:8000/mcp
+    gateway_config: config/profiles/learned_optimizer.yaml
+    token_env: AGENT_TOKEN_ASSISTANT
+  full:
+    description: Security pipeline + learned optimizer + result cache.
+    mcp_url: http://127.0.0.1:8000/mcp
+    gateway_config: config/profiles/full.yaml
+    token_env: AGENT_TOKEN_ASSISTANT
+    auto_approve: true
+  order_filter_compress:
+    description: Security filters (PII, injection) run before the rule optimizer.
+    mcp_url: http://127.0.0.1:8000/mcp
+    gateway_config: config/profiles/order_filter_compress.yaml
+    token_env: AGENT_TOKEN_ASSISTANT
+    auto_approve: true
+  order_compress_filter:
+    description: Rule optimizer runs before the security filters.
+    mcp_url: http://127.0.0.1:8000/mcp
+    gateway_config: config/profiles/order_compress_filter.yaml
+    token_env: AGENT_TOKEN_ASSISTANT
+    auto_approve: true

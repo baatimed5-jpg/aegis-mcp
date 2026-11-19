@@ -1,0 +1,5 @@
+profile,calls,errors,tokens_before,tokens_after,token_savings,gateway_ms_p50,gateway_ms_p95
+security_only,69,1,142540,142540,0.0,16.71,126.01
+rule_optimizer,69,1,143039,32545,0.7725,0.54,3.01
+order_filter_compress,69,1,142540,32558,0.7716,17.9,135.24
+order_compress_filter,69,1,143039,32548,0.7725,9.45,24.27

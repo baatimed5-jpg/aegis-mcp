@@ -156,3 +156,88 @@ Format: **Decision**, then *Alternatives*, then *Reason*. Numbering follows ARCH
 - **Decision**: `/api/approvals` requires `Authorization: Bearer $ADMIN_TOKEN` (env var named by
   `admin_token_env`); without it the API answers 503. Agent keys are not admin keys.
 - *Reason*: an unauthenticated approval endpoint would let anyone approve a transfer.
+
+## D26: Agents live in `aegis_agents/` (not `agents/`)
+- **Decision**: the planned `agents/` folder is named `aegis_agents/` (assistant now, red team in Phase 8).
+- *Alternatives*: keep `agents/` (it shadows the OpenAI Agents SDK, whose import name is `agents`).
+- *Reason*: with the repo root on `sys.path`, `import agents` would load our folder instead of the SDK.
+
+## D27: Benchmark = 50 generated tasks, automatic checks first, LLM judge only for free text
+- **Decision**: `evaluation/build_tasks.py` builds the tasks from the seeded dataset with the same
+  `WealthService` the server uses (seed 42); expected answers are computed, never typed. 18 categories
+  (lookups, multi-step comparisons, transactions, simulated transfers, a non-existent client).
+  Checks: `number` (rel 0.5 % for money, ±0.051 for percentages), `text` (all groups present, dates
+  in several spellings), `judge` (5 free-form tasks only). A judge error counts as a failure.
+- *Alternatives*: hand-written answers (error-prone, not reproducible); LLM judge for everything (noisy, costly).
+- *Reason*: reproducible, cheap and defensible; a unit test proves each expected value passes its own checker.
+- *Limit*: a number check passes if the right number appears anywhere in the answer.
+
+## D28: Baseline model and settings
+- **Decision**: assistant + judge = `gemini/gemini-3.5-flash` via LiteLLM (2026-11-18: `gemini-2.5-flash`
+  answers 404 "no longer available to new users"; 3.6/3.7/3.8-flash answered 503 "high demand"). Gemini 3.x rejects `temperature`, so it is not sent;
+  `seed=42` is sent. Runs are therefore not fully deterministic, which is why each profile runs 3 times.
+- *Reason*: Flash is the spec's default; the model id is one line in `config/eval_profiles.yaml`.
+
+## D29: Baseline profiles, approvals and run tagging
+- **Decision**: Phase 4 baseline = `no_gateway` (direct to the wealth server) and `security_only` (gateway
+  with the Phase 3 pipeline, no optimizer). Transfers keep requiring approval; during evaluation an
+  auto-approver approves them through the admin REST API, so the approval path is measured, not skipped.
+  The runner creates an `experiment_run` row and sends its id in `_meta["aegis/run_id"]`; the gateway
+  stores it in `audit_call.run_id`, which also proves `_meta` reaches the gateway (D4 verified, Phase 4).
+- *Reason*: both are "no optimization" configurations; Phase 5 compares the optimizer against them.
+
+## D30: Free-tier quota strategy: offline replay for tokens, live runs for task success
+- **Decision**: the free Gemini tier allows 500 requests/day for the assistant model (measured
+  2026-11-19, `GenerateRequestsPerDayPerProjectPerModel-FreeTier`). Token savings and gateway overhead
+  of every profile are measured **offline** by replaying the reference tool calls of the 50 tasks
+  (`evaluation/oracle.py`, `evaluation/replay.py`): deterministic, exact, no LLM. Task success (needs the
+  LLM) is measured live with the resumable runner; `scripts/run_live_evals.sh` continues each day.
+  Offline helper LLM work (labeling, red team, LLM detector) uses `gemini-3.1-flash-lite`, whose quota is
+  separate, so it never competes with the assistant model.
+- *Reason*: honest numbers for every configuration tonight, without switching the assistant model mid-study.
+
+## D31: Optimizer = pruning rules + compact tables + evidence recovery + downstream cache
+- Rules (`config/pruning_rules.yaml`) drop fields per tool (`list[].field` syntax). Removed data is saved
+  (Redis `omitted:<ref>`, 15 min) and the virtual tool `aegis__fetch_omitted` returns it, so a too
+  aggressive rule costs one extra call, not a wrong answer. `compact` serialization turns homogeneous
+  lists of objects into `{columns, rows}` (lossless). The cache stores raw downstream results of
+  `readOnlyHint` tools only; hits still run PII/injection/pruning (D3). Virtual tools go through the
+  normal pipeline (auth, policy, audit, PII).
+
+## D32: Metrics middleware counts tokens of the model-visible text (tiktoken o200k_base)
+- `tokens_before` = result text before the optimizer, `tokens_after` = final text; cost saved =
+  difference x input price of the agent model (config). Provider-reported usage of the assistant run is
+  recorded separately by the evaluation runner.
+
+## D33: CPU PyTorch
+- The GPU wheel (~2.5 GB) could not be downloaded in time (~300 KB/s link). DeBERTa-v3-small is fine-tuned
+  on CPU (12 cores); the same script uses CUDA when available. The Docker image needs CPU torch anyway.
+
+## D34: Detector selection and calibration
+- `injection_scan.detector`: rules | deberta | llm | combined. DeBERTa and the combined detector are
+  calibrated so that the threshold chosen on validation maps to 0.5, so `threshold: 0.5` always means
+  "the model's validated operating point". Combined = logistic regression over rules + DeBERTa scores,
+  fitted on validation only. The LLM detector is batched (25 texts/request) and evaluated offline; it is
+  not the default in the gateway (latency and quota).
+
+## D35: Learned pruning: LLM labels, task-level split, recall-first threshold, rule fallback
+- Labels from an LLM-as-labeler over every reference call (field needed or not). Split by task (30/10/10)
+  so test questions are unseen. Features: question/field-name embedding similarity (all-MiniLM-L6-v2),
+  lexical overlap, tool, value kind/size, field id. LR vs LightGBM; the model with the best validation
+  PR-AUC is kept; threshold = highest one keeping >= 95 % of needed fields on validation.
+  Without `_meta` question (D4) or for an unknown tool, the rule pruner is used.
+
+## D36: Attack evaluation through the real pipeline
+- Each red-team text is returned by an in-process test tool and passes the configured response pipeline;
+  a call is "blocked" when the gateway records a security event. Round 2 = adaptive attacker (rewrites
+  what the rules caught). Benign set = finance texts with risky words + 100 real dataset comments.
+
+## D37: Dashboard API
+- Read-only admin routes (`/api/stats|audit|security-events|policies|pipeline|experiments`) share the
+  admin key with `/api/approvals`; live audit rows are pushed over `WS /api/ws/audit?token=` (browsers
+  cannot set headers on WebSockets), closing with 4401 on a bad key. CORS only for the dashboard origin.
+
+## D38: Docker demo uses compress -> filter and the rule detector
+- The replay showed the same savings with half the overhead when the optimizer runs before the PII and
+  injection scans (they scan less text). The demo image stays small (no ML libraries); the ML detector and
+  learned pruning are enabled by switching two config values after installing the `ml` group.

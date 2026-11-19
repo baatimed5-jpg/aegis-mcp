@@ -57,6 +57,13 @@ class PipelineConfig(_Strict):
     response: list[str] = Field(default_factory=list)
 
 
+class CacheConfig(_Strict):
+    """Downstream result cache (D3)."""
+
+    enabled: bool = False
+    ttl_s: int = Field(default=300, gt=0)
+
+
 class GatewayConfig(_Strict):
     """Full gateway configuration."""
 
@@ -69,6 +76,12 @@ class GatewayConfig(_Strict):
     policies_file: str | None = None
     approval_timeout_s: float = Field(default=120.0, gt=0)
     admin_token_env: str | None = "ADMIN_TOKEN"
+    cache: CacheConfig = Field(default_factory=CacheConfig)
+    redis_url: str | None = None
+    """Taken from ``REDIS_URL`` when unset; without it, cache and evidence stores are in memory."""
+    config_dir: str | None = None
+    """Directory of the loaded YAML (set by ``load_config``) to resolve relative file names."""
+    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:4200"])
 
     @field_validator("servers")
     @classmethod
@@ -111,6 +124,9 @@ def load_config(path: Path | str = DEFAULT_CONFIG_PATH, *, env_file: Path | None
     config = GatewayConfig.model_validate(data)
     if config.database_url is None:
         config.database_url = os.environ.get("DATABASE_URL")
+    if config.redis_url is None:
+        config.redis_url = os.environ.get("REDIS_URL") or None
+    config.config_dir = str(Path(path).resolve().parent)
     if config.policies_file and not Path(config.policies_file).is_absolute():
         config.policies_file = str((Path(path).parent / config.policies_file).resolve())
     return config
