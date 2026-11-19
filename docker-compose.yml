@@ -8,6 +8,8 @@ x-python: &python
     DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-aegis}:${POSTGRES_PASSWORD:-aegis_dev_password}@postgres:5432/${POSTGRES_DB:-aegis}
     REDIS_URL: redis://redis:6379/0
 
+name: aegis-mcp  # fixed project name: volumes keep their names if the folder moves
+
 services:
   postgres:
     image: postgres:16

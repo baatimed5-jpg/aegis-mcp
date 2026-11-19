@@ -1,0 +1,10 @@
+profile,metric,mean,std,runs
+rule_optimizer,task_success_rate,0.940000,0.000000,1
+rule_optimizer,input_tokens_per_task,5457.780000,0.000000,1
+rule_optimizer,output_tokens_per_task,108.320000,0.000000,1
+rule_optimizer,tool_output_tokens_per_task,937.760000,0.000000,1
+rule_optimizer,llm_requests_per_task,2.480000,0.000000,1
+rule_optimizer,tool_calls_per_task,1.660000,0.000000,1
+rule_optimizer,cost_usd_per_task,0.001908,0.000000,1
+rule_optimizer,errors,0.000000,0.000000,1
+rule_optimizer,wall_s_per_task,15.191800,0.000000,1

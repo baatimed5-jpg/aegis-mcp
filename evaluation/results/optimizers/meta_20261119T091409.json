@@ -1,0 +1,13 @@
+{
+  "model": "gemini/gemini-3.5-flash-lite",
+  "judge_model": "gemini/gemini-3.5-flash-lite",
+  "runs": 3,
+  "tasks": 50,
+  "profiles": [
+    "rule_optimizer",
+    "learned_optimizer",
+    "full"
+  ],
+  "git_sha": "a46ec6c4ce7298da98df3ba652871ddea21abb7f",
+  "started_at": "2026-11-19T09:14:09.288909+00:00"
+}
